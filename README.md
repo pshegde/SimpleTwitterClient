@@ -1,10 +1,7 @@
-# RestClientTemplate
 
-## Overview
+# Project 3 - *Twitter client*
 
-# Project 3 - *Name of App Here*
-
-**Name of your app** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
+**Twitter client** is an android app that allows a user to view his Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
 Time spent: **X** hours spent in total
 
