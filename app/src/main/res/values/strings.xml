@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Rest Client Template</string>
+    <string name="app_name">SimpleTweets</string>
     <string name="login_label">Log in</string>
+    <string name="connect_to_twitter">Connect with Twitter</string>
+    <string name="title_activity_timeline">TimelineActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
