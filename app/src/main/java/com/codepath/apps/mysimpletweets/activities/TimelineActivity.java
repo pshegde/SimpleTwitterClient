@@ -1,25 +1,44 @@
-package com.codepath.apps.mysimpletweets;
+package com.codepath.apps.mysimpletweets.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
+import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.adapters.TweetArrayAdapter;
+import com.codepath.apps.mysimpletweets.applications.TwitterApplication;
+import com.codepath.apps.mysimpletweets.clients.TwitterClient;
+import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TimelineActivity extends ActionBarActivity {
 
     private TwitterClient client;
+    private List<Tweet> tweets;
+    private TweetArrayAdapter aTweets;
+    private ListView lvTweets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+        lvTweets = (ListView) findViewById(R.id.lvTweets);
+        //create the arraylist
+        tweets = new ArrayList<>();
+        //construct adapter from data source
+        aTweets = new TweetArrayAdapter(this,tweets);
+        //connect adapter
+        lvTweets.setAdapter(aTweets);
         client = TwitterApplication.getRestClient();
         populateTimeline();
     }
@@ -30,7 +49,14 @@ public class TimelineActivity extends ActionBarActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG",response.toString());
-                super.onSuccess(statusCode, headers, response);
+
+                //deserialize json
+
+                //create models
+                //load the model data into listview
+                aTweets.clear();
+                aTweets.addAll(Tweet.fromJSONArray(response));
+
             }
 
             @Override
