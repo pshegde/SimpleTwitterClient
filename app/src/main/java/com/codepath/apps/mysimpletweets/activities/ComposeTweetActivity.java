@@ -1,10 +1,12 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -71,12 +73,36 @@ public class ComposeTweetActivity extends ActionBarActivity {
                 tvScreenName.setText(auth_user.getScreenName());
                 tvFirstName.setText(auth_user.getName().toString());
                 Picasso.with(getBaseContext()).load(auth_user.getProfileImageUrl()).into(ivUserProfilePic);
+                btTweet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        postToTwitter();
+                    }
+                });
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(getBaseContext(), "No username found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "No user found", Toast.LENGTH_SHORT).show();
                 Log.d("DEBUG", errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+    }
+
+    private void postToTwitter() {
+        String tweet = etComposeTweet.getText().toString();
+        TwitterUtilities.getRestClient().postTweet(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Toast.makeText(getBaseContext(), "Posted tweet!", Toast.LENGTH_SHORT).show();
+                Intent data = new Intent();
+                setResult(RESULT_OK, data);
+                finish();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });

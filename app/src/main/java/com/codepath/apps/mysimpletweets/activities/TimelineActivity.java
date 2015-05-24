@@ -110,10 +110,17 @@ public class TimelineActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK && requestCode==20){
+            populateTimeline();
+        }
+    }
+
     private void onComposeTweet() {
         Toast.makeText(getBaseContext(),"Compose tweet",Toast.LENGTH_SHORT).show();
         Intent composeIntent = new Intent(this, ComposeTweetActivity.class);
-        startActivity(composeIntent);
+        startActivityForResult(composeIntent,20);
     }
 
     // Append more data into the adapter
