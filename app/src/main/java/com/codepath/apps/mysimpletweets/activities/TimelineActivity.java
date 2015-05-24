@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +31,7 @@ public class TimelineActivity extends ActionBarActivity {
     private ListView lvTweets;
     private String max_id;
     private String since_id;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +58,49 @@ public class TimelineActivity extends ActionBarActivity {
                 // or customLoadMoreDataFromApi(totalItemsCount);
             }
         });
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                fetchTimelineAsync(0);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
     }
 
+    public void fetchTimelineAsync(int page) {
+        TwitterUtilities.getRestClient().getHomeTimeline(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                // ...the data has come back, add new items to your adapter...
+                aTweets.clear();
+                List<Tweet> list = Tweet.fromJSONArray(response);
+                aTweets.addAll(list);
+                int lastTweet = list.size() - 1;
+                max_id = String.valueOf(list.get(lastTweet).getUid());
+                since_id = String.valueOf(list.get(0).getUid());//list.get(0);
+                // Now we call setRefreshing(false) to signal refresh has finished
+                swipeContainer.setRefreshing(false);
+            }
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+
+    }
 
     //send api req to timeline json and crate tweet obj using deserialize and create tweet
     private void populateTimeline(){
@@ -120,7 +162,7 @@ public class TimelineActivity extends ActionBarActivity {
     private void onComposeTweet() {
         Toast.makeText(getBaseContext(),"Compose tweet",Toast.LENGTH_SHORT).show();
         Intent composeIntent = new Intent(this, ComposeTweetActivity.class);
-        startActivityForResult(composeIntent,20);
+        startActivityForResult(composeIntent, 20);
     }
 
     // Append more data into the adapter
