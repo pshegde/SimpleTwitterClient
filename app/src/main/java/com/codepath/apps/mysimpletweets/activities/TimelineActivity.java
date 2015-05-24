@@ -119,12 +119,17 @@ public class TimelineActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if(id==R.id.action_compose_tweet) {
+            //launch a second age form activity
+            onComposeTweet();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void onComposeTweet() {
+        Toast.makeText(getBaseContext(),"Compose tweet",Toast.LENGTH_SHORT).show();
+
     }
 
     // Append more data into the adapter
