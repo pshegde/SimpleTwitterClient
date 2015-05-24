@@ -2,6 +2,7 @@ package com.codepath.apps.mysimpletweets.clients;
 
 import android.content.Context;
 
+import com.codepath.apps.mysimpletweets.utilities.TwitterConstants;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -49,11 +50,21 @@ public class TwitterClient extends OAuthBaseClient {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         //specify the params
         RequestParams params = new RequestParams();
-        params.put("count",25);
-        params.put("since_id",1);  //since the first tweet see all the tweets
+        params.put("count",TwitterConstants.MAX_TWEETS);
+        //params.put("since_id",1);  //since the first tweet see all the tweets
         getClient().get(apiUrl,params,handler);
     }
 
+    public void getHomeTimelineScroll(String since_id, String max_id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/home_timeline.json");
+        //specify the params
+        RequestParams params = new RequestParams();
+        params.put("count", TwitterConstants.MAX_TWEETS);
+        params.put("max_id",max_id);  //since the first tweet see all the tweets
+        //params.put("since_id",since_id);
+        getClient().get(apiUrl,params,handler);
+
+    }
     //composing a tweet
 
 

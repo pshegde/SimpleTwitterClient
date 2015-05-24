@@ -6,12 +6,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.TweetArrayAdapter;
 import com.codepath.apps.mysimpletweets.applications.TwitterApplication;
 import com.codepath.apps.mysimpletweets.clients.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.scrolllistener.EndlessScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -27,6 +29,8 @@ public class TimelineActivity extends ActionBarActivity {
     private List<Tweet> tweets;
     private TweetArrayAdapter aTweets;
     private ListView lvTweets;
+    private String max_id;
+    private String since_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,17 @@ public class TimelineActivity extends ActionBarActivity {
         lvTweets.setAdapter(aTweets);
         client = TwitterApplication.getRestClient();
         populateTimeline();
+
+        // Attach the listener to the AdapterView onCreate
+        lvTweets.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                customLoadMoreDataFromApi(page, totalItemsCount);
+                // or customLoadMoreDataFromApi(totalItemsCount);
+            }
+        });
     }
 
     //send api req to timeline json and crate tweet obj using deserialize and create tweet
@@ -57,6 +72,9 @@ public class TimelineActivity extends ActionBarActivity {
                 aTweets.clear();
                 List<Tweet> list = Tweet.fromJSONArray(response);
                 aTweets.addAll(list);
+                int lastTweet = list.size()-1;
+                max_id = String.valueOf(list.get(lastTweet).getUid());
+                since_id = String.valueOf(list.get(0).getUid());//list.get(0);
 
             }
 
@@ -89,4 +107,42 @@ public class TimelineActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    // Append more data into the adapter
+    public void customLoadMoreDataFromApi(int offset, int total) {
+        // This method probably sends out a network request and appends new data items to your adapter.
+        // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
+        // Deserialize API response and then construct new objects to append to the adapter
+        if (offset>4)
+                return;
+
+        client.getHomeTimelineScroll(since_id,max_id,new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d("DEBUG",response.toString());
+
+                //deserialize json
+
+                //create models
+                //load the model data into listview
+               // aTweets.clear();
+                List<Tweet> list = Tweet.fromJSONArray(response);
+                int lastTweet = list.size()-1;
+                if(list.size() == 0)
+                    Toast.makeText(getBaseContext(),"No tweets found",Toast.LENGTH_SHORT).show();
+                max_id = String.valueOf(list.get(lastTweet).getUid());
+                since_id = String.valueOf(list.get(0).getUid());//list.get(0);
+                aTweets.addAll(list);
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG",errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+    }
+
+
 }
