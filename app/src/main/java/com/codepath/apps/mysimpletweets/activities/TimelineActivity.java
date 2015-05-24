@@ -55,7 +55,8 @@ public class TimelineActivity extends ActionBarActivity {
                 //create models
                 //load the model data into listview
                 aTweets.clear();
-                aTweets.addAll(Tweet.fromJSONArray(response));
+                List<Tweet> list = Tweet.fromJSONArray(response);
+                aTweets.addAll(list);
 
             }
 
