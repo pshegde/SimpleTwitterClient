@@ -13,6 +13,7 @@ import com.codepath.apps.mysimpletweets.adapters.TweetArrayAdapter;
 import com.codepath.apps.mysimpletweets.applications.TwitterApplication;
 import com.codepath.apps.mysimpletweets.clients.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.scrolllistener.EndlessScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -44,6 +45,7 @@ public class TimelineActivity extends ActionBarActivity {
         //connect adapter
         lvTweets.setAdapter(aTweets);
         client = TwitterApplication.getRestClient();
+        updateUserName();
         populateTimeline();
 
         // Attach the listener to the AdapterView onCreate
@@ -54,6 +56,23 @@ public class TimelineActivity extends ActionBarActivity {
                 // Add whatever code is needed to append new items to your AdapterView
                 customLoadMoreDataFromApi(page, totalItemsCount);
                 // or customLoadMoreDataFromApi(totalItemsCount);
+            }
+        });
+    }
+
+    private void updateUserName() {
+        client.getUserCredentials(new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                User auth_user = User.fromJSON(response);
+                getSupportActionBar().setTitle("@" + auth_user.getScreenName());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(getBaseContext(),"No username found",Toast.LENGTH_SHORT).show();
+                Log.d("DEBUG",errorResponse.toString());
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
     }
