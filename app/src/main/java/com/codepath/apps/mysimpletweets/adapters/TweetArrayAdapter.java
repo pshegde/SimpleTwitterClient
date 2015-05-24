@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.utilities.ParseRelativeDate;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -37,9 +38,11 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
         ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
         TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
         TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+        TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
         //populate data into subview
         tvUserName.setText(tweet.getUser().getScreenName());
         tvBody.setText(tweet.getBody());
+        tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
         //return view to be inserted in the list
         return convertView;
