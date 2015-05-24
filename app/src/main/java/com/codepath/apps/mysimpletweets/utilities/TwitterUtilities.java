@@ -2,14 +2,25 @@ package com.codepath.apps.mysimpletweets.utilities;
 
 import android.text.format.DateUtils;
 
+import com.codepath.apps.mysimpletweets.applications.TwitterApplication;
+import com.codepath.apps.mysimpletweets.clients.TwitterClient;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
- * Created by Prajakta on 5/23/2015.
+ * Created by Prajakta on 5/24/2015.
  */
-public class ParseRelativeDate {
+public class TwitterUtilities {
+    private static TwitterClient client;
+
+    public static TwitterClient getRestClient() {
+        if (client == null)
+            client = TwitterApplication.getRestClient();
+        return client;
+    }
+
     // getRelativeTimeAgo("Mon Apr 01 21:16:23 +0000 2014");
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";

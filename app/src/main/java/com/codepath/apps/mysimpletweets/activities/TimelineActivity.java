@@ -1,5 +1,6 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -10,11 +11,9 @@ import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.TweetArrayAdapter;
-import com.codepath.apps.mysimpletweets.applications.TwitterApplication;
-import com.codepath.apps.mysimpletweets.clients.TwitterClient;
 import com.codepath.apps.mysimpletweets.models.Tweet;
-import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.scrolllistener.EndlessScrollListener;
+import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -26,7 +25,6 @@ import java.util.List;
 
 public class TimelineActivity extends ActionBarActivity {
 
-    private TwitterClient client;
     private List<Tweet> tweets;
     private TweetArrayAdapter aTweets;
     private ListView lvTweets;
@@ -44,8 +42,8 @@ public class TimelineActivity extends ActionBarActivity {
         aTweets = new TweetArrayAdapter(this,tweets);
         //connect adapter
         lvTweets.setAdapter(aTweets);
-        client = TwitterApplication.getRestClient();
-        updateUserName();
+
+        getSupportActionBar().setTitle(R.string.home);
         populateTimeline();
 
         // Attach the listener to the AdapterView onCreate
@@ -60,29 +58,14 @@ public class TimelineActivity extends ActionBarActivity {
         });
     }
 
-    private void updateUserName() {
-        client.getUserCredentials(new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                User auth_user = User.fromJSON(response);
-                getSupportActionBar().setTitle("@" + auth_user.getScreenName());
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(getBaseContext(),"No username found",Toast.LENGTH_SHORT).show();
-                Log.d("DEBUG",errorResponse.toString());
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
-    }
 
     //send api req to timeline json and crate tweet obj using deserialize and create tweet
     private void populateTimeline(){
-        client.getHomeTimeline(new JsonHttpResponseHandler(){
+        TwitterUtilities.getRestClient().getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.d("DEBUG",response.toString());
+                Log.d("DEBUG", response.toString());
 
                 //deserialize json
 
@@ -91,7 +74,7 @@ public class TimelineActivity extends ActionBarActivity {
                 aTweets.clear();
                 List<Tweet> list = Tweet.fromJSONArray(response);
                 aTweets.addAll(list);
-                int lastTweet = list.size()-1;
+                int lastTweet = list.size() - 1;
                 max_id = String.valueOf(list.get(lastTweet).getUid());
                 since_id = String.valueOf(list.get(0).getUid());//list.get(0);
 
@@ -99,7 +82,7 @@ public class TimelineActivity extends ActionBarActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG",errorResponse.toString());
+                Log.d("DEBUG", errorResponse.toString());
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
@@ -129,7 +112,8 @@ public class TimelineActivity extends ActionBarActivity {
 
     private void onComposeTweet() {
         Toast.makeText(getBaseContext(),"Compose tweet",Toast.LENGTH_SHORT).show();
-
+        Intent composeIntent = new Intent(this, ComposeTweetActivity.class);
+        startActivity(composeIntent);
     }
 
     // Append more data into the adapter
@@ -140,20 +124,20 @@ public class TimelineActivity extends ActionBarActivity {
         if (offset>4)
                 return;
 
-        client.getHomeTimelineScroll(since_id,max_id,new JsonHttpResponseHandler(){
+        TwitterUtilities.getRestClient().getHomeTimelineScroll(since_id, max_id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                Log.d("DEBUG",response.toString());
+                Log.d("DEBUG", response.toString());
 
                 //deserialize json
 
                 //create models
                 //load the model data into listview
-               // aTweets.clear();
+                // aTweets.clear();
                 List<Tweet> list = Tweet.fromJSONArray(response);
-                int lastTweet = list.size()-1;
-                if(list.size() == 0)
-                    Toast.makeText(getBaseContext(),"No tweets found",Toast.LENGTH_SHORT).show();
+                int lastTweet = list.size() - 1;
+                if (list.size() == 0)
+                    Toast.makeText(getBaseContext(), "No tweets found", Toast.LENGTH_SHORT).show();
                 max_id = String.valueOf(list.get(lastTweet).getUid());
                 since_id = String.valueOf(list.get(0).getUid());//list.get(0);
                 aTweets.addAll(list);
@@ -162,7 +146,7 @@ public class TimelineActivity extends ActionBarActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG",errorResponse.toString());
+                Log.d("DEBUG", errorResponse.toString());
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
