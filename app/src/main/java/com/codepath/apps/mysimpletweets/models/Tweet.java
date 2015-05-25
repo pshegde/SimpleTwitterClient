@@ -16,13 +16,13 @@ import java.util.List;
  */
 @Table(name = "Tweets")
 public class Tweet extends Model {
-   @Column(name = "Body")
+   @Column(name = "body")
     private String body;
-    @Column(name = "Uid")
+    @Column(name = "uid")
     private long uid; //db id for the tweet
-    @Column(name = "CreatedAt")
+    @Column(name = "createdAt")
     private String createdAt;
-    @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
+    @Column(name = "user", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
 
     public Tweet() {

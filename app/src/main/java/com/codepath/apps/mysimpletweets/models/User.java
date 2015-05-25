@@ -22,15 +22,15 @@ import org.json.JSONObject;
  "is_translator": false,
  "profile_link_color": "0084B4",
  */
-@Table(name = "Users")
+@Table(name = "user")
 public class User extends Model {
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
-    @Column(name = "Uid")
+    @Column(name = "uid")
     private long uid;
-    @Column(name = "ScreenName")
+    @Column(name = "screenName")
     private String screenName;
-    @Column(name = "ProfileImageUrl")
+    @Column(name = "profileImageUrl")
     private String profileImageUrl;
 
     public User() {

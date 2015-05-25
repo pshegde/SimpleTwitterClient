@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.TweetArrayAdapter;
@@ -158,12 +159,20 @@ public class TimelineActivity extends ActionBarActivity {
 
         if(onNoScroll) {
             // Deleting all earlier items
-            Tweet item = Tweet.load(Tweet.class, 1);
-            item.delete();
-            User user = User.load(User.class,2);
-            user.delete();
+//            Tweet item = Tweet.load(Tweet.class, 1);
+//            item.delete();
+//            User user = User.load(User.class,2);
+//            user.delete();
 // or with
-           // new Delete().from(Tweet.class).where("remote_id = ?", 1).execute();
+            List<Tweet> queryResults = new Select().from(Tweet.class)
+                    .execute();
+            for(Tweet t:queryResults) {
+                new Delete().from(Tweet.class).where("uid = ?", t.getUid()).execute();
+            }
+            List<User> userResults = new Select().from(User.class).execute();
+            for(User u:userResults) {
+                new Delete().from(User.class).where("uid = ?", u.getUid()).execute();
+            }
         }
         for(Tweet tweet:tweetsList) {
             // Create a category
