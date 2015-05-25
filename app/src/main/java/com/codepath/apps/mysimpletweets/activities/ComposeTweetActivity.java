@@ -1,13 +1,12 @@
 package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,17 +27,22 @@ public class ComposeTweetActivity extends ActionBarActivity {
     private TextView tvScreenName;
     private EditText etComposeTweet;
     private TextView tvFirstName;
-    private Button btTweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose_tweet);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources()
+                .getColor(R.color.blue)));
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_bird1);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+
         ivUserProfilePic = (ImageView) findViewById(R.id.ivUserProfilePic);
         tvFirstName = (TextView) findViewById(R.id.tvFirstName);
         tvScreenName = (TextView) findViewById(R.id.tvScreenName);
         etComposeTweet = (EditText) findViewById(R.id.etComposeText);
-        btTweet = (Button) findViewById(R.id.btTweet);
         updateUserName();
     }
 
@@ -58,7 +62,8 @@ public class ComposeTweetActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_tweet) {
+            postToTwitter();
             return true;
         }
 
@@ -73,12 +78,7 @@ public class ComposeTweetActivity extends ActionBarActivity {
                 tvScreenName.setText(auth_user.getScreenName());
                 tvFirstName.setText(auth_user.getName().toString());
                 Picasso.with(getBaseContext()).load(auth_user.getProfileImageUrl()).into(ivUserProfilePic);
-                btTweet.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        postToTwitter();
-                    }
-                });
+
             }
 
             @Override

@@ -7,20 +7,11 @@
     tools:context="com.codepath.apps.mysimpletweets.activities.ComposeTweetActivity">
 
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_tweet_text"
-        android:id="@+id/btTweet"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/ivUserProfilePic"
-        android:layout_below="@+id/btTweet"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginRight="5dp"/>
@@ -31,7 +22,7 @@
         android:id="@+id/tvFirstName"
         android:layout_toRightOf="@+id/ivUserProfilePic"
         android:layout_toEndOf="@+id/ivUserProfilePic"
-        android:layout_below="@+id/btTweet"/>
+        android:layout_alignParentRight="true"/>
 
     <TextView
         android:layout_width="wrap_content"

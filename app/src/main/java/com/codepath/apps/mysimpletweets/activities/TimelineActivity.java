@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -46,6 +47,11 @@ public class TimelineActivity extends ActionBarActivity {
         lvTweets.setAdapter(aTweets);
 
         getSupportActionBar().setTitle(R.string.home);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources()
+                                                                        .getColor(R.color.blue)));
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_bird1);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
         populateTimeline();
 
         // Attach the listener to the AdapterView onCreate
