@@ -119,6 +119,7 @@ public class TimelineActivity extends ActionBarActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
+                Toast.makeText(getBaseContext(),R.string.no_network_string,Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
