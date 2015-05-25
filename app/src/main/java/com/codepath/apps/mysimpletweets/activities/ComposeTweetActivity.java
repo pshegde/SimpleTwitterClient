@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +29,8 @@ public class ComposeTweetActivity extends ActionBarActivity {
     private TextView tvScreenName;
     private EditText etComposeTweet;
     private TextView tvFirstName;
+    private TextView tvTextChar;
+    private TextWatcher mTextEditorWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,25 @@ public class ComposeTweetActivity extends ActionBarActivity {
         tvFirstName = (TextView) findViewById(R.id.tvFirstName);
         tvScreenName = (TextView) findViewById(R.id.tvScreenName);
         etComposeTweet = (EditText) findViewById(R.id.etComposeText);
+        tvTextChar = (TextView) findViewById(R.id.tvTextChar);
         updateUserName();
+        tvTextChar.setText("140");
+
+        mTextEditorWatcher = new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                tvTextChar.setText("140");
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                tvTextChar.setText(String.valueOf(140-s.length()));
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        etComposeTweet.addTextChangedListener(mTextEditorWatcher);
+        etComposeTweet.setFocusable(true);
     }
 
 
@@ -107,4 +129,6 @@ public class ComposeTweetActivity extends ActionBarActivity {
             }
         });
     }
+
+
 }

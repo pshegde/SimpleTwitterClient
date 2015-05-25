@@ -22,7 +22,7 @@
         android:id="@+id/tvFirstName"
         android:layout_toRightOf="@+id/ivUserProfilePic"
         android:layout_toEndOf="@+id/ivUserProfilePic"
-        android:layout_alignParentRight="true"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -33,6 +33,13 @@
         android:layout_toEndOf="@+id/ivUserProfilePic"
         android:layout_alignBottom="@+id/ivUserProfilePic"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTextChar"
+        android:layout_alignRight="@+id/tvFirstName"
+        android:layout_alignParentRight="true"/>
 
     <EditText
         android:id="@+id/etComposeText"
@@ -49,6 +56,7 @@
         android:inputType="textMultiLine"
         android:background="@color/white"
         android:layout_marginTop="5dp"
+        android:maxLength="140"
          />
 
 
