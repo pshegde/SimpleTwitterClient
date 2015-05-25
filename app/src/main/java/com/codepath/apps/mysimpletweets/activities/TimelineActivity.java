@@ -1,7 +1,10 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -11,9 +14,11 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.TweetArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.scrolllistener.EndlessScrollListener;
 import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -52,8 +57,19 @@ public class TimelineActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_bird1);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
-        populateTimeline();
+        if (!isNetworkAvailable()) {
+            Toast.makeText(this, R.string.no_network_string, Toast.LENGTH_SHORT).show();
+            //show cached tweets
+            // Construct adapter plugging in the array source
+            // Query ActiveAndroid for list of data
+            List<Tweet> queryResults = new Select().from(Tweet.class)
+                    .orderBy("CreatedAt ASC").limit(100).execute();
+            // Load the result into the adapter using `addAll`
+            aTweets.addAll(queryResults);
 
+        } else {
+            populateTimeline();
+        }
         // Attach the listener to the AdapterView onCreate
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -126,6 +142,8 @@ public class TimelineActivity extends ActionBarActivity {
                 max_id = String.valueOf(list.get(lastTweet).getUid());
                 since_id = String.valueOf(list.get(0).getUid());//list.get(0);
 
+                //save to database
+                saveTweetsOfflineStorage(list,true);
             }
 
             @Override
@@ -134,6 +152,27 @@ public class TimelineActivity extends ActionBarActivity {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
+    }
+
+    private void saveTweetsOfflineStorage(List<Tweet> tweetsList, boolean onNoScroll) {
+
+        if(onNoScroll) {
+            // Deleting all earlier items
+            Tweet item = Tweet.load(Tweet.class, 1);
+            item.delete();
+            User user = User.load(User.class,2);
+            user.delete();
+// or with
+           // new Delete().from(Tweet.class).where("remote_id = ?", 1).execute();
+        }
+        for(Tweet tweet:tweetsList) {
+            // Create a category
+            User user = tweet.getUser();
+            user.save();
+
+            // Create an item
+            tweet.save();
+        }
     }
 
     @Override
@@ -196,7 +235,7 @@ public class TimelineActivity extends ActionBarActivity {
                 max_id = String.valueOf(list.get(lastTweet).getUid());
                 since_id = String.valueOf(list.get(0).getUid());//list.get(0);
                 aTweets.addAll(list);
-
+                saveTweetsOfflineStorage(list,false);
             }
 
             @Override
@@ -207,5 +246,10 @@ public class TimelineActivity extends ActionBarActivity {
         });
     }
 
-
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
 }

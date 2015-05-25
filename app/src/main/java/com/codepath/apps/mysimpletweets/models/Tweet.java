@@ -1,5 +1,9 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,11 +14,20 @@ import java.util.List;
 /**
  * Created by Prajakta on 5/20/2015.
  */
-public class Tweet {
+@Table(name = "Tweets")
+public class Tweet extends Model {
+   @Column(name = "Body")
     private String body;
+    @Column(name = "Uid")
     private long uid; //db id for the tweet
+    @Column(name = "CreatedAt")
     private String createdAt;
+    @Column(name = "User", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
+
+    public Tweet() {
+        super();
+    }
 
     public String getBody() {
         return body;
@@ -66,5 +79,21 @@ public class Tweet {
 
         }
         return list;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

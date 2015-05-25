@@ -1,5 +1,9 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,11 +22,21 @@ import org.json.JSONObject;
  "is_translator": false,
  "profile_link_color": "0084B4",
  */
-public class User {
+@Table(name = "Users")
+public class User extends Model {
+    @Column(name = "Name")
     private String name;
+    @Column(name = "Uid")
     private long uid;
+    @Column(name = "ScreenName")
     private String screenName;
+    @Column(name = "ProfileImageUrl")
     private String profileImageUrl;
+
+    public User() {
+        super();
+
+    }
 
     public String getScreenName() {
         return screenName;
@@ -51,5 +65,21 @@ public class User {
             e.printStackTrace();
         }
         return u;
+    }
+
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
     }
 }

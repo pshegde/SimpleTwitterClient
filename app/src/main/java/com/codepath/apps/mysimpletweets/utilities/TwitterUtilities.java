@@ -1,5 +1,8 @@
 package com.codepath.apps.mysimpletweets.utilities;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.format.DateUtils;
 
 import com.codepath.apps.mysimpletweets.applications.TwitterApplication;
@@ -42,4 +45,7 @@ public class TwitterUtilities {
 
         return relativeDate;
     }
+
+
+
 }

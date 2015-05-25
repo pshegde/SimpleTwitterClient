@@ -13,5 +13,6 @@
     <string name="btn_tweet_text">Tweet</string>
     <string name="home">Home</string>
     <string name="action_tweet">Tweet</string>
+    <string name="no_network_string">No network available</string>
 
 </resources>
