@@ -23,6 +23,7 @@
         android:id="@+id/tvFirstName"
         android:layout_toRightOf="@+id/ivUserProfilePic"
         android:layout_toEndOf="@+id/ivUserProfilePic"
+        android:textColor="@android:color/black"
         />
 
     <TextView
@@ -33,6 +34,7 @@
         android:layout_toRightOf="@+id/ivUserProfilePic"
         android:layout_toEndOf="@+id/ivUserProfilePic"
         android:layout_alignBottom="@+id/ivUserProfilePic"
+        android:textColor="@color/gray"
         />
 
     <TextView
