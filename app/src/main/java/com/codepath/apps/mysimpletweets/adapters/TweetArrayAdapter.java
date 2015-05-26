@@ -19,11 +19,15 @@ import java.util.List;
  * Created by Prajakta on 5/23/2015.
  */
 public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
-
+    private static class ViewHolder {
+        ImageView ivProfileImage;
+        TextView tvUserName;
+        TextView tvBody;
+        TextView tvDate;
+    }
 
     public TweetArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, android.R.layout.simple_list_item_1, tweets);
-
     }
 
     @Override
@@ -31,19 +35,29 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
         //get tweet
         Tweet tweet = getItem(position);
         //find or inflate the template
-        if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
+//        if(convertView == null){
+//            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
+//        }
+        ViewHolder viewHolder; // view lookup cache stored in tag
+        if (convertView == null) {
+            viewHolder = new ViewHolder();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.item_tweet, parent, false);
+            viewHolder.ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+            viewHolder.tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
+            viewHolder.tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+            viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
         //find the subviews to fill data in the template
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
-        TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
+
         //populate data into subview
-        tvUserName.setText(tweet.getUser().getScreenName());
-        tvBody.setText(tweet.getBody());
-        tvDate.setText(TwitterUtilities.getRelativeTimeAgo(tweet.getCreatedAt()));
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        viewHolder.tvUserName.setText(tweet.getUser().getScreenName());
+        viewHolder.tvBody.setText(tweet.getBody());
+        viewHolder.tvDate.setText(TwitterUtilities.getRelativeTimeAgo(tweet.getCreatedAt()));
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
         //return view to be inserted in the list
         return convertView;
     }
