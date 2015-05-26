@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.utilities.TwitterConstants;
 import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -49,7 +50,7 @@ public class ComposeTweetActivity extends ActionBarActivity {
         etComposeTweet = (EditText) findViewById(R.id.etComposeText);
         tvTextChar = (TextView) findViewById(R.id.tvTextChar);
         updateUserName();
-        tvTextChar.setText("140");
+        tvTextChar.setText(TwitterConstants.MAX_FIELD_LENGTH);
 
         mTextEditorWatcher = new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -58,7 +59,7 @@ public class ComposeTweetActivity extends ActionBarActivity {
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //This sets a textview to the current length
-                tvTextChar.setText(String.valueOf(140-s.length()));
+                tvTextChar.setText(String.valueOf(Integer.valueOf(TwitterConstants.MAX_FIELD_LENGTH)-s.length()));
             }
 
             public void afterTextChanged(Editable s) {
@@ -97,7 +98,7 @@ public class ComposeTweetActivity extends ActionBarActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 User auth_user = User.fromJSON(response);
-                tvScreenName.setText(auth_user.getScreenName());
+                tvScreenName.setText("@" + auth_user.getScreenName());
                 tvFirstName.setText(auth_user.getName().toString());
                 Picasso.with(getBaseContext()).load(auth_user.getProfileImageUrl()).into(ivUserProfilePic);
 
@@ -105,7 +106,7 @@ public class ComposeTweetActivity extends ActionBarActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(getBaseContext(), "No user found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), R.string.no_user_string, Toast.LENGTH_SHORT).show();
                 Log.d("DEBUG", errorResponse.toString());
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
@@ -117,7 +118,7 @@ public class ComposeTweetActivity extends ActionBarActivity {
         TwitterUtilities.getRestClient().postTweet(tweet, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Toast.makeText(getBaseContext(), "Posted tweet!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), R.string.posted_tweet, Toast.LENGTH_SHORT).show();
                 Intent data = new Intent();
                 setResult(RESULT_OK, data);
                 finish();

@@ -14,5 +14,10 @@
     <string name="home">Home</string>
     <string name="action_tweet">Tweet</string>
     <string name="no_network_string">No network available</string>
+    <string name="whats_happening">What\'s happening?</string>
+    <string name="no_user_string">No user found</string>
+    <string name="posted_tweet">Posted tweet!</string>
+    <string name="no_tweets">Unable to retrieve the tweets!</string>
+    <string name="max_length">140</string>
 
 </resources>

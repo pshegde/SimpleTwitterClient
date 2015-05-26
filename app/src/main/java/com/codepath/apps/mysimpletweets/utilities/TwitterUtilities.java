@@ -1,8 +1,5 @@
 package com.codepath.apps.mysimpletweets.utilities;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.text.format.DateUtils;
 
 import com.codepath.apps.mysimpletweets.applications.TwitterApplication;
@@ -16,7 +13,7 @@ import java.util.Locale;
  * Created by Prajakta on 5/24/2015.
  */
 public class TwitterUtilities {
-    private static TwitterClient client;
+     private static TwitterClient client;
 
     public static TwitterClient getRestClient() {
         if (client == null)
