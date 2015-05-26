@@ -6,5 +6,8 @@
     <dimen name="margin_compose_text">5dp</dimen>
     <dimen name="margin_login">20dp</dimen>
     <dimen name="img_view_dimen">50dp</dimen>
+    <dimen name="ten_pix">10dp</dimen>
+    <dimen name="twenty_pix">20px</dimen>
+    <dimen name="five_pix">5dp</dimen>
 
 </resources>

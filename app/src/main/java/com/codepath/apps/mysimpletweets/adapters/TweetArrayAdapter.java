@@ -24,6 +24,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
         TextView tvUserName;
         TextView tvBody;
         TextView tvDate;
+        TextView tvName;
     }
 
     public TweetArrayAdapter(Context context, List<Tweet> tweets) {
@@ -47,6 +48,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder.tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
             viewHolder.tvBody = (TextView) convertView.findViewById(R.id.tvBody);
             viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
+            viewHolder.tvName = (TextView) convertView.findViewById(R.id.tvName);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -54,9 +56,10 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
         //find the subviews to fill data in the template
 
         //populate data into subview
-        viewHolder.tvUserName.setText(tweet.getUser().getScreenName());
+        viewHolder.tvUserName.setText("@" +tweet.getUser().getScreenName());
         viewHolder.tvBody.setText(tweet.getBody());
         viewHolder.tvDate.setText(TwitterUtilities.getRelativeTimeAgo(tweet.getCreatedAt()));
+        viewHolder.tvName.setText(tweet.getUser().getName());
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
         //return view to be inserted in the list
         return convertView;
