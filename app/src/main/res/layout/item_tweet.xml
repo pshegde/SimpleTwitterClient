@@ -10,25 +10,40 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:width="50dp"
-        android:height="50dp"
-        android:layout_marginRight="5dp"
+        android:width="@dimen/img_view_dimen"
+        android:height="@dimen/img_view_dimen"
+        android:layout_marginRight="@dimen/margin_compose_text"
         android:contentDescription="desc"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tvUserName"
+        android:id="@+id/tvName"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
-         />
+        android:textColor="@android:color/black"
+        />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvUserName"
+        android:layout_toRightOf="@+id/tvName"
+        android:layout_toEndOf="@+id/tvName"
+        android:textColor="@color/gray"
+        android:layout_marginLeft="@dimen/five_pix"
+        android:textSize="@dimen/ten_pix"
+        android:gravity="center_vertical"
+         />
+
+    <com.codepath.apps.mysimpletweets.utilities.LinkifiedTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvBody"
         android:layout_below="@+id/tvUserName"
         android:layout_toRightOf="@+id/ivProfileImage"
+        android:autoLink="all"
+        android:linksClickable="true"
         />
 
     <TextView
