@@ -40,7 +40,7 @@ Here's a walkthrough of implemented user stories:
 
 <img src='https://github.com/pshegde/TwitterClient/blob/master/gifs/walkthrough_twitter.gif' width=''  />
 
-Detail view:<br>
+Update: added Detail view:<br>
 <img src='https://github.com/pshegde/TwitterClient/blob/master/gifs/walkthrough_detail.gif' width=''  />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
