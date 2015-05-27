@@ -3,29 +3,37 @@ package com.codepath.apps.mysimpletweets.activities;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
+
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class TweetDisplayActivity extends ActionBarActivity {
     private ImageView ivDetailProfileImage;
     private TextView tvDetailName;
     private TextView tvDetailUserName;
     private TextView tvDetailBody;
-    //private TextView tvDetailDesc;
+  //  private TextView tvDetailDesc;
     private TextView tvDetailDate;
-
+    private Tweet tweet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet_display);
 
-        Tweet tweet = (Tweet) getIntent().getSerializableExtra("tweet_selected");
+        tweet = (Tweet) getIntent().getSerializableExtra("tweet_selected");
 
         getSupportActionBar().setTitle(R.string.home);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources()
@@ -41,15 +49,37 @@ public class TweetDisplayActivity extends ActionBarActivity {
         tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
        // tvDetailDesc = (TextView) findViewById(R.id.tvDetailDesc);
 
-        tvDetailUserName.setText("@" +tweet.getUser().getScreenName());
-        tvDetailBody.setText(tweet.getBody());
-        tvDetailDate.setText(tweet.getCreatedAt());
-        tvDetailName.setText(tweet.getUser().getName());
+        getDetails();
 
-        Picasso.with(getBaseContext()).load(tweet.getUser().getProfileImageUrl()).into(ivDetailProfileImage);
 
     }
 
+    private void getDetails(){
+        TwitterUtilities.getRestClient().showTweet(tweet.getUid(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // ...the data has come back, add new items to your adapter...
+                tvDetailUserName.setText("@" + tweet.getUser().getScreenName());
+                tvDetailDate.setText(tweet.getCreatedAt());
+                tvDetailName.setText(tweet.getUser().getName());
+                try {
+                   // tvDetailDesc.setText(response.getString("description"));
+                    tvDetailBody.setText(response.getString("text"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                };
+                Picasso.with(getBaseContext()).load(tweet.getUser().getProfileImageUrl()).into(ivDetailProfileImage);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+                Toast.makeText(getBaseContext(), R.string.no_network_string, Toast.LENGTH_SHORT).show();
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -52,6 +52,14 @@
         android:linksClickable="true"
         />
 
+    <!--<com.codepath.apps.mysimpletweets.utilities.LinkifiedTextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/tvDetailDesc"-->
+        <!--android:layout_below="@+id/tvDetailBody"-->
+        <!--android:autoLink="all"-->
+        <!--android:linksClickable="true"-->
+        <!--/>-->
 
     <TextView
         android:layout_width="wrap_content"
