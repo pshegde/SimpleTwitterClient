@@ -57,6 +57,11 @@
             android:name=".activities.ComposeTweetActivity"
             android:label="@string/title_activity_compose_tweet" >
         </activity>
+        <activity
+            android:name=".activities.TweetDisplayActivity"
+            android:label="@string/title_activity_tweet_display"
+            android:parentActivityName=".activities.TimelineActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * Created by Prajakta on 5/20/2015.
  */
 @Table(name = "Tweets")
-public class Tweet extends Model {
+public class Tweet extends Model implements Serializable {
    @Column(name = "body")
     private String body;
     @Column(name = "uid")
@@ -24,6 +25,7 @@ public class Tweet extends Model {
     private String createdAt;
     @Column(name = "user", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
+
 
     public Tweet() {
         super();
@@ -45,7 +47,7 @@ public class Tweet extends Model {
         return createdAt;
     }
 
-    //Deserialize the JSON into a java obj
+     //Deserialize the JSON into a java obj
     //Tweet.fromJSON("{ ... }"} = ><tweet>
     public static Tweet fromJSON(JSONObject jsonObject){
         Tweet tweet = new Tweet();
@@ -53,7 +55,7 @@ public class Tweet extends Model {
 
         try {
             tweet.body = jsonObject.getString("text");
-
+            //tweet.description = jsonObject.getString("description");
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
@@ -96,4 +98,39 @@ public class Tweet extends Model {
     public void setUser(User user) {
         this.user = user;
     }
+
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel out, int flags) {
+//        out.writeString(body);
+//        out.writeLong(uid);
+//        out.writeString(createdAt);
+//        out.writeParcelable(user,flags);
+//    }
+//
+//    public static final Parcelable.Creator<Tweet> CREATOR
+//            = new Parcelable.Creator<Tweet>() {
+//        @Override
+//        public Tweet createFromParcel(Parcel in) {
+//            return new Tweet(in);
+//        }
+//
+//        @Override
+//        public Tweet[] newArray(int size) {
+//            return new Tweet[size];
+//        }
+//    };
+//
+//    private Tweet(Parcel in) {
+//        body = in.readString();
+//        uid = in.readInt();
+//        createdAt = in.readString();
+//        user = in.readParcelable(com.codepath.apps.mysimpletweets.models.User.class.getClassLoader());
+//    }
+
+
 }

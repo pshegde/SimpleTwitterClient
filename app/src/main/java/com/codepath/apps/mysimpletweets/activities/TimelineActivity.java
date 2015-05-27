@@ -11,6 +11,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -80,6 +82,16 @@ public class TimelineActivity extends ActionBarActivity {
                 customLoadMoreDataFromApi(page, totalItemsCount);
                 // or customLoadMoreDataFromApi(totalItemsCount);
             }
+        });
+        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(TimelineActivity.this, TweetDisplayActivity.class);
+                Tweet result = tweets.get(position);
+                i.putExtra("tweet_selected", result);   //either be serializable or parcelable
+                startActivity(i);
+            }
+
         });
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);

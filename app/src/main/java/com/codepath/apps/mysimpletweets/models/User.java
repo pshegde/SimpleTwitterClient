@@ -7,6 +7,8 @@ import com.activeandroid.annotation.Table;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Prajakta on 5/20/2015.
  *  "user": {
@@ -23,7 +25,7 @@ import org.json.JSONObject;
  "profile_link_color": "0084B4",
  */
 @Table(name = "user")
-public class User extends Model {
+public class User extends Model implements Serializable{
     @Column(name = "name")
     private String name;
     @Column(name = "uid")
@@ -82,4 +84,39 @@ public class User extends Model {
     public void setScreenName(String screenName) {
         this.screenName = screenName;
     }
+
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel out, int flags) {
+//        out.writeString(name);
+//        out.writeLong(uid);
+//        out.writeString(screenName);
+//        out.writeString(profileImageUrl);
+//    }
+
+//    public static final Parcelable.Creator<User> CREATOR
+//            = new Parcelable.Creator<User>() {
+//        @Override
+//        public User createFromParcel(Parcel in) {
+//            return new User(in);
+//        }
+//
+//        @Override
+//        public User[] newArray(int size) {
+//            return new User[size];
+//        }
+//    };
+
+//    private User(Parcel in) {
+//        name = in.readString();
+//        uid = in.readLong();
+//        screenName = in.readString();
+//        profileImageUrl = in.readString();
+//    }
+
+
 }
