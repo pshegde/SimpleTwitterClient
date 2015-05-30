@@ -52,17 +52,17 @@ public class TwitterClient extends OAuthBaseClient {
         RequestParams params = new RequestParams();
         params.put("count",TwitterConstants.MAX_TWEETS);
         //params.put("since_id",1);  //since the first tweet see all the tweets
-        getClient().get(apiUrl,params,handler);
+        getClient().get(apiUrl, params, handler);
     }
 
-    public void getHomeTimelineScroll(String since_id, String max_id, AsyncHttpResponseHandler handler) {
+    public void getHomeTimelineScroll(String max_id, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         //specify the params
         RequestParams params = new RequestParams();
         params.put("count", TwitterConstants.MAX_TWEETS);
         params.put("max_id",max_id);  //since the first tweet see all the tweets
         //params.put("since_id",since_id);
-        getClient().get(apiUrl,params,handler);
+        getClient().get(apiUrl, params, handler);
 
     }
 
@@ -89,6 +89,27 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("id", tweetId);
         getClient().get(apiUrl, params, handler);
     }
+
+    public void getMentionsTimeline(AsyncHttpResponseHandler handler){
+        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+        //specify the params
+        RequestParams params = new RequestParams();
+        params.put("count",TwitterConstants.MAX_TWEETS);
+        //params.put("since_id",1);  //since the first tweet see all the tweets
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getMentionsTimelineScroll(String max_id, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+        //specify the params
+        RequestParams params = new RequestParams();
+        params.put("count", TwitterConstants.MAX_TWEETS);
+        params.put("max_id",max_id);  //since the first tweet see all the tweets
+        //params.put("since_id",since_id);
+        getClient().get(apiUrl,params,handler);
+
+    }
+
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
 	 * 	  i.e getApiUrl("statuses/home_timeline.json");
 	 * 2. Define the parameters to pass to the request (query or body)

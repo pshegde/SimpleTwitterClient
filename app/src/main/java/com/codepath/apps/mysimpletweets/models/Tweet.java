@@ -1,5 +1,8 @@
 package com.codepath.apps.mysimpletweets.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -8,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ import java.util.List;
  * Created by Prajakta on 5/20/2015.
  */
 @Table(name = "Tweets")
-public class Tweet extends Model implements Serializable {
+public class Tweet extends Model implements Parcelable {
    @Column(name = "body")
     private String body;
     @Column(name = "uid")
@@ -99,38 +101,36 @@ public class Tweet extends Model implements Serializable {
         this.user = user;
     }
 
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel out, int flags) {
-//        out.writeString(body);
-//        out.writeLong(uid);
-//        out.writeString(createdAt);
-//        out.writeParcelable(user,flags);
-//    }
-//
-//    public static final Parcelable.Creator<Tweet> CREATOR
-//            = new Parcelable.Creator<Tweet>() {
-//        @Override
-//        public Tweet createFromParcel(Parcel in) {
-//            return new Tweet(in);
-//        }
-//
-//        @Override
-//        public Tweet[] newArray(int size) {
-//            return new Tweet[size];
-//        }
-//    };
-//
-//    private Tweet(Parcel in) {
-//        body = in.readString();
-//        uid = in.readInt();
-//        createdAt = in.readString();
-//        user = in.readParcelable(com.codepath.apps.mysimpletweets.models.User.class.getClassLoader());
-//    }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.body);
+        dest.writeLong(this.uid);
+        dest.writeString(this.createdAt);
+        dest.writeParcelable(this.user, 0);
+
+    }
+
+    private Tweet(Parcel in) {
+        this.body = in.readString();
+        this.uid = in.readLong();
+        this.createdAt = in.readString();
+        this.user = in.readParcelable(User.class.getClassLoader());
+
+    }
+
+    public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
+        public Tweet createFromParcel(Parcel source) {
+            return new Tweet(source);
+        }
+
+        public Tweet[] newArray(int size) {
+            return new Tweet[size];
+        }
+    };
 }

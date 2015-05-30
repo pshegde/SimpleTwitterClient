@@ -33,7 +33,7 @@ public class TweetDisplayActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet_display);
 
-        tweet = (Tweet) getIntent().getSerializableExtra("tweet_selected");
+        tweet = (Tweet) getIntent().getParcelableExtra("tweet_selected");
 
         getSupportActionBar().setTitle(R.string.home);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources()
