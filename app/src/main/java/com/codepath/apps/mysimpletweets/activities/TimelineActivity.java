@@ -17,10 +17,12 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
-import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 
 public class TimelineActivity extends ActionBarActivity {
-    private TweetsListFragment listFragment;
+   // private TweetsListFragment listFragment;
+    private ViewPager vpPager;
+    private TweetsPagerAdapter vpAdapter;
+    private PagerSlidingTabStrip tabStrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +40,15 @@ public class TimelineActivity extends ActionBarActivity {
 //        }
 
         //get the viewpager
-        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+         vpPager = (ViewPager) findViewById(R.id.viewpager);
 
 
         //set the viewpager adapter fr the pager
-        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        vpAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(vpAdapter);
 
         //find the sliding tabstrip
-        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 
         //attavh tabstrip to the viewpager
         tabStrip.setViewPager(vpPager);
@@ -74,17 +77,25 @@ public class TimelineActivity extends ActionBarActivity {
     }
 
     private void onComposeTweet() {
-        Toast.makeText(getBaseContext(),"Compose tweet",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Compose tweet", Toast.LENGTH_SHORT).show();
         Intent composeIntent = new Intent(this, ComposeTweetActivity.class);
         startActivityForResult(composeIntent, 20);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK && requestCode==20){
-            listFragment.populateTimeline();
+        if(resultCode == this.RESULT_OK && requestCode==20){
+            //((HomeTimelineFragment)vpAdapter.getItem(0)).populateTimeline();
+            //populateTimeline();
         }
     }
+
+    public void onProfileView(MenuItem v){
+        Intent profileIntent = new Intent(this, ProfileActivity.class);
+        profileIntent.putExtra("screen_name","");
+        startActivityForResult(profileIntent, 21);
+    }
+
 
     //return the order of fragments in the view pager
     public class TweetsPagerAdapter extends FragmentPagerAdapter {

@@ -16,7 +16,7 @@ import org.json.JSONObject;
 /**
  * Created by Prajakta on 5/30/2015.
  */
-public class MentionsTimelineFragment extends TweetsListFragment {
+public class UserTimelineFragment extends TweetsListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +35,19 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         }
     }
 
+    public static UserTimelineFragment newInstance(String screen_name) {
+        UserTimelineFragment fragmentDemo = new UserTimelineFragment();
+        Bundle args = new Bundle();
+        args.putString("screen_name", screen_name);
+        fragmentDemo.setArguments(args);
+        return fragmentDemo;
+    }
+
     @Override
     public void fetchTimelineAsync(int page) {
-        TwitterUtilities.getRestClient().getMentionsTimeline(new JsonHttpResponseHandler() {
+        String screenname = getArguments().getString("screen_name", "");
+
+        TwitterUtilities.getRestClient().getUserTimeline(screenname, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 addAll(Tweet.fromJSONArray(response), true);
@@ -57,7 +67,8 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 
     @Override
     public void populateTimeline() {
-        TwitterUtilities.getRestClient().getMentionsTimeline(new JsonHttpResponseHandler() {
+        String screenname = getArguments().getString("screen_name", "");
+        TwitterUtilities.getRestClient().getUserTimeline(screenname, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
@@ -77,8 +88,9 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     public void customLoadMoreDataFromApi(int offset, int total) {
         if (offset>2)
             return;
+        String screenname = getArguments().getString("screen_name", "");
 
-        TwitterUtilities.getRestClient().getMentionsTimelineScroll(getMaxId(), new JsonHttpResponseHandler() {
+        TwitterUtilities.getRestClient().getUserTimelineScroll(screenname, getMaxId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
@@ -94,3 +106,4 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         });
     }
 }
+

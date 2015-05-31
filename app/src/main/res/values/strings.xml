@@ -20,5 +20,6 @@
     <string name="no_tweets">Unable to retrieve the tweets!</string>
     <string name="max_length">140</string>
     <string name="title_activity_tweet_display">TweetDisplayActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

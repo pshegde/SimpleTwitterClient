@@ -156,4 +156,8 @@ public abstract class TweetsListFragment extends Fragment{
     public void setMaxId(String max_id) {
         this.max_id = max_id;
     }
+
+
+
+
 }
