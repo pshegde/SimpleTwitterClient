@@ -1,7 +1,6 @@
 package com.codepath.apps.mysimpletweets.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -10,14 +9,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.codepath.apps.mysimpletweets.R;
-import com.codepath.apps.mysimpletweets.activities.TweetDisplayActivity;
 import com.codepath.apps.mysimpletweets.adapters.TweetArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
@@ -29,7 +26,7 @@ import java.util.List;
 /**
  * Created by Prajakta on 5/29/2015.
  */
-public abstract class TweetsListFragment extends Fragment{
+public abstract class TweetsListFragment extends Fragment {
     public List<Tweet> tweets;
     public ListView lvTweets;
     private ProgressBar progressBarFooter;
@@ -45,7 +42,7 @@ public abstract class TweetsListFragment extends Fragment{
         //create the arraylist
         tweets = new ArrayList<>();
         //construct adapter from data source
-        aTweets = new TweetArrayAdapter(getActivity(),tweets);
+        aTweets = new TweetArrayAdapter(getActivity(), tweets);
 
         setupListWithFooter(v);
 
@@ -58,16 +55,6 @@ public abstract class TweetsListFragment extends Fragment{
                 customLoadMoreDataFromApi(page, totalItemsCount);
                 // or customLoadMoreDataFromApi(totalItemsCount);
             }
-        });
-        lvTweets.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getActivity(), TweetDisplayActivity.class);
-                Tweet result = tweets.get(position);
-                i.putExtra("tweet_selected", result);   //either be serializable or parcelable
-                startActivity(i);
-            }
-
         });
 
         swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
@@ -97,10 +84,10 @@ public abstract class TweetsListFragment extends Fragment{
 
     }
 
-    public void addAll(List<Tweet> list,boolean clear){
-        if(aTweets == null)
+    public void addAll(List<Tweet> list, boolean clear) {
+        if (aTweets == null)
             return;
-        if(clear)
+        if (clear)
             aTweets.clear();
         //List<Tweet> list = Tweet.fromJSONArray(response);
         aTweets.addAll(list);
@@ -113,7 +100,7 @@ public abstract class TweetsListFragment extends Fragment{
 
     private void saveTweetsOfflineStorage(List<Tweet> tweetsList, boolean clear) {
 
-        if(clear) {
+        if (clear) {
             // Deleting all earlier items
 //            Tweet item = Tweet.load(Tweet.class, 1);
 //            item.delete();
@@ -122,15 +109,15 @@ public abstract class TweetsListFragment extends Fragment{
 // or with
             List<Tweet> queryResults = new Select().from(Tweet.class)
                     .execute();
-            for(Tweet t:queryResults) {
+            for (Tweet t : queryResults) {
                 new Delete().from(Tweet.class).where("uid = ?", t.getUid()).execute();
             }
             List<User> userResults = new Select().from(User.class).execute();
-            for(User u:userResults) {
+            for (User u : userResults) {
                 new Delete().from(User.class).where("uid = ?", u.getUid()).execute();
             }
         }
-        for(Tweet tweet:tweetsList) {
+        for (Tweet tweet : tweetsList) {
             // Create a category
             User user = tweet.getUser();
             user.save();
@@ -152,7 +139,7 @@ public abstract class TweetsListFragment extends Fragment{
         // Find the ListView
         ListView lvItems = (ListView) v.findViewById(R.id.lvTweets);
         // Inflate the footer
-        if(progressBarFooter==null) {
+        if (progressBarFooter == null) {
             View footer = getActivity().getLayoutInflater().inflate(
                     R.layout.footer_progress, null);
             // Find the progressbar within footer
@@ -167,7 +154,7 @@ public abstract class TweetsListFragment extends Fragment{
 
     // Show progress
     public void showProgressBar() {
-        if(progressBarFooter!=null) {
+        if (progressBarFooter != null) {
             progressBarFooter.setVisibility(View.VISIBLE);
         }
 
@@ -175,15 +162,17 @@ public abstract class TweetsListFragment extends Fragment{
 
     // Hide progress
     public void hideProgressBar() {
-        if(progressBarFooter!=null) {
+        if (progressBarFooter != null) {
             progressBarFooter.setVisibility(View.GONE);
         }
     }
 
     //to be overridden in fragments
-    public abstract void fetchTimelineAsync(int page) ;
+    public abstract void fetchTimelineAsync(int page);
+
     public abstract void populateTimeline();
-//        showProgressBar();
+
+    //        showProgressBar();
 //        TwitterUtilities.getRestClient().getHomeTimeline(new JsonHttpResponseHandler() {
 //            @Override
 //            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -211,8 +200,6 @@ public abstract class TweetsListFragment extends Fragment{
     public void setMaxId(String max_id) {
         this.max_id = max_id;
     }
-
-
 
 
 }

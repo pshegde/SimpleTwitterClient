@@ -133,42 +133,42 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getFriendsIds(String uid, AsyncHttpResponseHandler handler){
+    public void getFriendsIds(String screenName, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("friends/ids.json");
         //specify the params
         RequestParams params = new RequestParams();
-        params.put("user_id",uid);
+        params.put("screen_name",screenName);
         params.put("count",TwitterConstants.MAX_USERS);
         //params.put("since_id",1);  //since the first tweet see all the tweets
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getFriendsIdsScroll(String uid, String max_id, AsyncHttpResponseHandler handler){
+    public void getFriendsIdsScroll(String screenName, String max_id, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("friends/ids.json");
         //specify the params
         RequestParams params = new RequestParams();
-        params.put("user_id",uid);
+        params.put("screen_name",screenName);
         params.put("max_id",max_id);
         params.put("count",TwitterConstants.MAX_USERS);
         //params.put("since_id",1);  //since the first tweet see all the tweets
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getFollowersIds(String uid, AsyncHttpResponseHandler handler){
+    public void getFollowersIds(String screenName, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("followers/ids.json");
         //specify the params
         RequestParams params = new RequestParams();
-        params.put("user_id",uid);
+        params.put("screen_name",screenName);
         params.put("count",TwitterConstants.MAX_USERS);
         //params.put("since_id",1);  //since the first tweet see all the tweets
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getFollowersIdsScroll(String uid, String max_id, AsyncHttpResponseHandler handler){
+    public void getFollowersIdsScroll(String screenName, String max_id, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("followers/ids.json");
         //specify the params
         RequestParams params = new RequestParams();
-        params.put("user_id",uid);
+        params.put("screen_name",screenName);
         params.put("max_id",max_id);
         params.put("count",TwitterConstants.MAX_USERS);
         //params.put("since_id",1);  //since the first tweet see all the tweets

@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -21,12 +20,7 @@ import com.codepath.apps.mysimpletweets.fragments.FriendsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.User;
-import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
-
-import org.apache.http.Header;
-import org.json.JSONObject;
 
 public class ProfileActivity extends ActionBarActivity {
     private User user;
@@ -56,45 +50,38 @@ public class ProfileActivity extends ActionBarActivity {
         tvFollowersCount = (TextView) findViewById(R.id.tvFollowers);
         tvFriendsCount = (TextView) findViewById(R.id.tvFriends);
 
-        TwitterUtilities.getRestClient().getUserCredentials(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                user = User.fromJSON(response);
-                getSupportActionBar().setTitle("@" + user.getScreenName());
-                populateProfileHeader(user);
-            }
+        user = getIntent().getParcelableExtra("user_selected");
+        if(user == null){
+            Toast.makeText(getBaseContext(), R.string.no_user_string, Toast.LENGTH_SHORT).show();
+        } else {
+            getSupportActionBar().setTitle("@" + user.getScreenName());
+            populateProfileHeader(user);
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-                Toast.makeText(getBaseContext(), R.string.no_user_string, Toast.LENGTH_SHORT).show();
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
-        //get the screenname
+            //get the viewpager
+            vpPager = (ViewPager) findViewById(R.id.vpProfile);
 
-        String screenName = getIntent().getStringExtra("screen_name");
+
+            //set the viewpager adapter fr the pager
+            vpAdapter = new ProfilePagerAdapter(getSupportFragmentManager());
+            vpPager.setAdapter(vpAdapter);
+            vpAdapter.setUser(user);
+
+            //find the sliding tabstrip
+            tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabsProfile);
+
+            //attavh tabstrip to the viewpager
+            tabStrip.setViewPager(vpPager);
+
+        }
+
+        //String screenName = getIntent().getStringExtra("screen_name");
         //create the user timeline fragment
         //if(savedInstanceState == null) {
 //            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 //            UserTimelineFragment frag = UserTimelineFragment.newInstance(screenName);
 //            ft.replace(R.id.flContainer, frag);
 //            ft.commit();
-        //get the viewpager
-        vpPager = (ViewPager) findViewById(R.id.vpProfile);
 
-
-        //set the viewpager adapter fr the pager
-        vpAdapter = new ProfilePagerAdapter(getSupportFragmentManager());
-        vpPager.setAdapter(vpAdapter);
-        vpAdapter.setScreenName(screenName);
-
-        //find the sliding tabstrip
-        tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabsProfile);
-
-        //attavh tabstrip to the viewpager
-        tabStrip.setViewPager(vpPager);
-        //  }
     }
 
     private void populateProfileHeader(User user) {
@@ -131,8 +118,8 @@ public class ProfileActivity extends ActionBarActivity {
     //return the order of fragments in the view pager
     public class ProfilePagerAdapter extends FragmentPagerAdapter {
         private String tabtitles[] = {"Tweets","Friends","Followers"};
-        UserTimelineFragment hf;
-        private String screenName;
+        private UserTimelineFragment hf;
+        private User user;
 
         public ProfilePagerAdapter(FragmentManager fm){
             super(fm);
@@ -141,12 +128,12 @@ public class ProfileActivity extends ActionBarActivity {
         @Override
         public Fragment getItem(int position) {
             if(position == 0) {
-                hf =  UserTimelineFragment.newInstance("");
+                hf =  UserTimelineFragment.newInstance(user.getScreenName());
                 return hf;
             } else if(position == 1){
-                return new FriendsListFragment().newInstance("") ;
+                return FriendsListFragment.newInstance(user.getScreenName()) ;
             } else if(position == 2) {
-                return new FollowersListFragment().newInstance("");
+                return FollowersListFragment.newInstance(user.getScreenName());
             } else
                 return null;
         }
@@ -167,8 +154,8 @@ public class ProfileActivity extends ActionBarActivity {
             return null;
         }
 
-        public void setScreenName(String screenName) {
-            this.screenName = screenName;
+        public void setUser(User user) {
+            this.user = user;
         }
     }
 }

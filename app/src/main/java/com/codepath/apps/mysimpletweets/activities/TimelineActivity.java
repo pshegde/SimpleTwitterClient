@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,6 +19,12 @@ import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
+import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 public class TimelineActivity extends ActionBarActivity {
    // private TweetsListFragment listFragment;
@@ -96,9 +103,23 @@ public class TimelineActivity extends ActionBarActivity {
 
 
     public void onProfileView(MenuItem v) {
-        Intent profileIntent = new Intent(this, ProfileActivity.class);
-        profileIntent.putExtra("screen_name","");
-        startActivityForResult(profileIntent, 21);
+        final Intent profileIntent = new Intent(this, ProfileActivity.class);
+        TwitterUtilities.getRestClient().getUserCredentials(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                User user = User.fromJSON(response);
+                profileIntent.putExtra("user_selected", user);
+                startActivityForResult(profileIntent, 21);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject
+                    errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+                Toast.makeText(getBaseContext(), R.string.no_user_string, Toast.LENGTH_SHORT).show();
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+        });
     }
 
 

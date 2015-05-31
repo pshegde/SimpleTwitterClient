@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.activities.ProfileActivity;
+import com.codepath.apps.mysimpletweets.activities.TweetDisplayActivity;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
 import com.squareup.picasso.Picasso;
@@ -19,6 +22,8 @@ import java.util.List;
  * Created by Prajakta on 5/23/2015.
  */
 public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
+    private Tweet tweet;
+
     private static class ViewHolder {
         ImageView ivProfileImage;
         TextView tvUserName;
@@ -34,7 +39,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //get tweet
-        Tweet tweet = getItem(position);
+        tweet = getItem(position);
         //find or inflate the template
 //        if(convertView == null){
 //            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet,parent,false);
@@ -50,6 +55,24 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
             viewHolder.tvName = (TextView) convertView.findViewById(R.id.tvName);
             convertView.setTag(viewHolder);
+
+            viewHolder.tvName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getContext(), TweetDisplayActivity.class);
+                    i.putExtra("tweet_selected", tweet);   //either be serializable or parcelable
+                    getContext().startActivity(i);
+                }
+            });
+            viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getContext(), ProfileActivity.class);
+                    i.putExtra("user_selected", tweet.getUser());   //either be serializable or parcelable
+                    getContext().startActivity(i);
+                }
+            });
+
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }

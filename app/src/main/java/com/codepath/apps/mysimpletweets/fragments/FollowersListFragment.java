@@ -38,10 +38,10 @@ public  class FollowersListFragment extends UsersListFragment {
 
     public void populateTimeline() {
         showProgressBar();
-        TwitterUtilities.getRestClient().getFollowersIds("", new JsonHttpResponseHandler() {
+        String screenName = getArguments().getString("screen_name", "");
+        TwitterUtilities.getRestClient().getFollowersIds(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("DEBUG", "dddddddddddddddddddddddddddddddd");
                 Log.d("DEBUG", response.toString());
                 try {
                     List<Integer> listFollowers = new ArrayList<Integer>();
@@ -49,7 +49,6 @@ public  class FollowersListFragment extends UsersListFragment {
                     int len = friends.length();
                     for (int i = 0; i < len; i++) {
                         listFollowers.add(friends.getInt(i));
-                        Log.d("DEBUG", "ppppp " + friends.getInt(i));
                     }
 
                     TwitterUtilities.getRestClient().getUserDetails(listFollowers, new JsonHttpResponseHandler() {
@@ -88,6 +87,4 @@ public  class FollowersListFragment extends UsersListFragment {
     public void customLoadMoreDataFromApi(int offset, int total){
 
     }
-
-
 }

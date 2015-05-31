@@ -38,10 +38,10 @@ public  class FriendsListFragment extends UsersListFragment {
 
     public void populateTimeline() {
         showProgressBar();
-        TwitterUtilities.getRestClient().getFriendsIds("", new JsonHttpResponseHandler() {
+        String screenName = getArguments().getString("screen_name", "");
+        TwitterUtilities.getRestClient().getFriendsIds(screenName, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("DEBUG", "dddddddddddddddddddddddddddddddd");
                 Log.d("DEBUG", response.toString());
                 try {
                     List<Integer> listFriends = new ArrayList<Integer>();
@@ -49,7 +49,6 @@ public  class FriendsListFragment extends UsersListFragment {
                     int len = friends.length();
                     for (int i=0;i<len;i++){
                         listFriends.add(friends.getInt(i));
-                        Log.d("DEBUG", "ppppp " + friends.getInt(i));
                     }
 
                     TwitterUtilities.getRestClient().getUserDetails(listFriends,new JsonHttpResponseHandler() {
