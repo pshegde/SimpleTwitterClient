@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
@@ -32,6 +33,7 @@ public abstract class TweetsListFragment extends Fragment{
     private List<Tweet> tweets;
     private TweetArrayAdapter aTweets;
     private ListView lvTweets;
+    private ProgressBar progressBarFooter;
 
     private String max_id;
     //private String since_id;
@@ -42,9 +44,7 @@ public abstract class TweetsListFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_tweets_list, parent, false);
         lvTweets = (ListView) v.findViewById(R.id.lvTweets);
 
-        //connect adapter
-        lvTweets.setAdapter(aTweets);
-
+        setupListWithFooter(v);
 
         // Attach the listener to the AdapterView onCreate
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
@@ -83,6 +83,8 @@ public abstract class TweetsListFragment extends Fragment{
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+
         return v;
     }
 
@@ -141,6 +143,39 @@ public abstract class TweetsListFragment extends Fragment{
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    // Adds footer to the list default hidden progress
+    public void setupListWithFooter(View v) {
+        // Find the ListView
+        ListView lvItems = (ListView) v.findViewById(R.id.lvTweets);
+        // Inflate the footer
+        if(progressBarFooter==null) {
+            View footer = getActivity().getLayoutInflater().inflate(
+                    R.layout.footer_progress, null);
+            // Find the progressbar within footer
+            progressBarFooter = (ProgressBar)
+                    footer.findViewById(R.id.pbFooterLoading);
+            // Add footer to ListView before setting adapter
+            lvTweets.addFooterView(footer);
+        }
+        //connect adapter
+        lvTweets.setAdapter(aTweets);
+    }
+
+    // Show progress
+    public void showProgressBar() {
+        if(progressBarFooter!=null) {
+            progressBarFooter.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    // Hide progress
+    public void hideProgressBar() {
+        if(progressBarFooter!=null) {
+            progressBarFooter.setVisibility(View.GONE);
+        }
     }
 
     //to be overridden in fragments
