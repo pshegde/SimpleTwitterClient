@@ -21,5 +21,6 @@
     <string name="max_length">140</string>
     <string name="title_activity_tweet_display">TweetDisplayActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="tweetzone">TweetZone</string>
 
 </resources>

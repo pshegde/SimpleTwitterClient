@@ -68,15 +68,18 @@ public class UserTimelineFragment extends TweetsListFragment {
     @Override
     public void populateTimeline() {
         String screenname = getArguments().getString("screen_name", "");
+        showProgressBar();
         TwitterUtilities.getRestClient().getUserTimeline(screenname, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                hideProgressBar();
                 Log.d("DEBUG", response.toString());
                 addAll(Tweet.fromJSONArray(response), true);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                hideProgressBar();
                 Log.d("DEBUG", errorResponse.toString());
                 Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -89,16 +92,19 @@ public class UserTimelineFragment extends TweetsListFragment {
         if (offset>2)
             return;
         String screenname = getArguments().getString("screen_name", "");
-
+        showProgressBar();
         TwitterUtilities.getRestClient().getUserTimelineScroll(screenname, getMaxId(), new JsonHttpResponseHandler() {
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                hideProgressBar();
                 Log.d("DEBUG", response.toString());
                 addAll(Tweet.fromJSONArray(response), false);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                hideProgressBar();
                 Log.d("DEBUG", errorResponse.toString());
                 Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, throwable, errorResponse);

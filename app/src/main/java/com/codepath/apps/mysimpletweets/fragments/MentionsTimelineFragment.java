@@ -57,15 +57,18 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 
     @Override
     public void populateTimeline() {
+        showProgressBar();
         TwitterUtilities.getRestClient().getMentionsTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                hideProgressBar();
                 Log.d("DEBUG", response.toString());
                 addAll(Tweet.fromJSONArray(response), true);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                hideProgressBar();
                 Log.d("DEBUG", errorResponse.toString());
                 Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -77,16 +80,18 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     public void customLoadMoreDataFromApi(int offset, int total) {
         if (offset>2)
             return;
-
+        showProgressBar();
         TwitterUtilities.getRestClient().getMentionsTimelineScroll(getMaxId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                hideProgressBar();
                 Log.d("DEBUG", response.toString());
                 addAll(Tweet.fromJSONArray(response), false);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                hideProgressBar();
                 Log.d("DEBUG", errorResponse.toString());
                 Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, throwable, errorResponse);

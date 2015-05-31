@@ -17,6 +17,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
+import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 
 public class TimelineActivity extends ActionBarActivity {
    // private TweetsListFragment listFragment;
@@ -85,12 +86,16 @@ public class TimelineActivity extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == this.RESULT_OK && requestCode==20){
-            //((HomeTimelineFragment)vpAdapter.getItem(0)).populateTimeline();
-            //populateTimeline();
+            vpAdapter.getRegisteredFragment(0).populateTimeline();
+
+            //((MentionsTimelineFragment)vpAdapter.getItem(1)).populateTimeline();
+
+
         }
     }
 
-    public void onProfileView(MenuItem v){
+
+    public void onProfileView(MenuItem v) {
         Intent profileIntent = new Intent(this, ProfileActivity.class);
         profileIntent.putExtra("screen_name","");
         startActivityForResult(profileIntent, 21);
@@ -100,16 +105,17 @@ public class TimelineActivity extends ActionBarActivity {
     //return the order of fragments in the view pager
     public class TweetsPagerAdapter extends FragmentPagerAdapter {
         private String tabtitles[] = {"Home","Mentions"};
-
+        HomeTimelineFragment hf;
         public TweetsPagerAdapter(FragmentManager fm){
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            if(position == 0)
-                return new HomeTimelineFragment();
-            else if(position == 1)
+            if(position == 0) {
+                hf = new HomeTimelineFragment();
+                return hf;
+            }else if(position == 1)
                 return new MentionsTimelineFragment();
             else
                 return null;
@@ -123,6 +129,12 @@ public class TimelineActivity extends ActionBarActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return tabtitles[position];
+        }
+
+        public TweetsListFragment getRegisteredFragment(int i) {
+            if(i==0)
+                return hf;
+            return null;
         }
     }
 }

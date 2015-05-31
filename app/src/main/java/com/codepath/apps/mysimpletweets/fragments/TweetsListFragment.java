@@ -30,11 +30,10 @@ import java.util.List;
  * Created by Prajakta on 5/29/2015.
  */
 public abstract class TweetsListFragment extends Fragment{
-    private List<Tweet> tweets;
-    private TweetArrayAdapter aTweets;
-    private ListView lvTweets;
+    public List<Tweet> tweets;
+    public ListView lvTweets;
     private ProgressBar progressBarFooter;
-
+    public TweetArrayAdapter aTweets;
     private String max_id;
     //private String since_id;
     public SwipeRefreshLayout swipeContainer;
@@ -43,6 +42,10 @@ public abstract class TweetsListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tweets_list, parent, false);
         lvTweets = (ListView) v.findViewById(R.id.lvTweets);
+        //create the arraylist
+        tweets = new ArrayList<>();
+        //construct adapter from data source
+        aTweets = new TweetArrayAdapter(getActivity(),tweets);
 
         setupListWithFooter(v);
 
@@ -91,13 +94,12 @@ public abstract class TweetsListFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //create the arraylist
-        tweets = new ArrayList<>();
-        //construct adapter from data source
-        aTweets = new TweetArrayAdapter(getActivity(),tweets);
+
     }
 
     public void addAll(List<Tweet> list,boolean clear){
+        if(aTweets == null)
+            return;
         if(clear)
             aTweets.clear();
         //List<Tweet> list = Tweet.fromJSONArray(response);
@@ -181,6 +183,24 @@ public abstract class TweetsListFragment extends Fragment{
     //to be overridden in fragments
     public abstract void fetchTimelineAsync(int page) ;
     public abstract void populateTimeline();
+//        showProgressBar();
+//        TwitterUtilities.getRestClient().getHomeTimeline(new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+//                Log.d("DEBUG", response.toString());
+//                addAll(Tweet.fromJSONArray(response), true);
+//                hideProgressBar();
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                hideProgressBar();
+//                Log.d("DEBUG", errorResponse.toString());
+//                Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
+//                super.onFailure(statusCode, headers, throwable, errorResponse);
+//            }
+//        });
+//    }
     public abstract void customLoadMoreDataFromApi(int offset, int total);
 
     //getter setters

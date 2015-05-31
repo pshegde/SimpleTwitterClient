@@ -40,15 +40,19 @@ public class HomeTimelineFragment extends TweetsListFragment {
     }
     //send api req to timeline json and crate tweet obj using deserialize and create tweet
     public void populateTimeline() {
+        Toast.makeText(getActivity(),"postttt",Toast.LENGTH_SHORT);
+        showProgressBar();
         TwitterUtilities.getRestClient().getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
                 addAll(Tweet.fromJSONArray(response), true);
+                hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                hideProgressBar();
                 Log.d("DEBUG", errorResponse.toString());
                 Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -63,10 +67,11 @@ public class HomeTimelineFragment extends TweetsListFragment {
         // Deserialize API response and then construct new objects to append to the adapter
         if (offset>4)
             return;
-
+        showProgressBar();
         TwitterUtilities.getRestClient().getHomeTimelineScroll(getMaxId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                hideProgressBar();
                 Log.d("DEBUG", response.toString());
 
                 //deserialize json
@@ -87,6 +92,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                hideProgressBar();
                 Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, throwable, errorResponse);
             }
