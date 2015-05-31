@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.fragments.FollowersListFragment;
 import com.codepath.apps.mysimpletweets.fragments.FriendsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserTimelineFragment;
@@ -129,7 +130,7 @@ public class ProfileActivity extends ActionBarActivity {
 
     //return the order of fragments in the view pager
     public class ProfilePagerAdapter extends FragmentPagerAdapter {
-        private String tabtitles[] = {"Tweets","Friends"};
+        private String tabtitles[] = {"Tweets","Friends","Followers"};
         UserTimelineFragment hf;
         private String screenName;
 
@@ -142,11 +143,11 @@ public class ProfileActivity extends ActionBarActivity {
             if(position == 0) {
                 hf =  UserTimelineFragment.newInstance("");
                 return hf;
-            }else if(position == 1){
-
+            } else if(position == 1){
                 return new FriendsListFragment().newInstance("") ;
-
-            }else
+            } else if(position == 2) {
+                return new FollowersListFragment().newInstance("");
+            } else
                 return null;
         }
 

@@ -52,9 +52,9 @@ public class UserArrayAdapter extends ArrayAdapter<User> {
         //find the subviews to fill data in the template
 
         //populate data into subview
-        viewHolder.tvFullName.setText("@" +user.getName());
+        viewHolder.tvFullName.setText(user.getName());
         viewHolder.tvBody.setText(user.getTagLine());
-        viewHolder.tvScreenName.setText(user.getScreenName());
+        viewHolder.tvScreenName.setText("@" + user.getScreenName());
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(viewHolder.ivProfileImage);
         //return view to be inserted in the list
         return convertView;
