@@ -2,7 +2,10 @@ package com.codepath.apps.mysimpletweets.activities;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,7 +14,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.mysimpletweets.R;
+import com.codepath.apps.mysimpletweets.fragments.FriendsListFragment;
+import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
@@ -28,6 +34,10 @@ public class ProfileActivity extends ActionBarActivity {
     private TextView tvTagline;
     private TextView tvFollowersCount;
     private TextView tvFriendsCount;
+
+    private ViewPager vpPager;
+    private ProfilePagerAdapter vpAdapter;
+    private PagerSlidingTabStrip tabStrip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +74,26 @@ public class ProfileActivity extends ActionBarActivity {
 
         String screenName = getIntent().getStringExtra("screen_name");
         //create the user timeline fragment
-        if(savedInstanceState == null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            UserTimelineFragment frag = UserTimelineFragment.newInstance(screenName);
-            ft.replace(R.id.flContainer, frag);
-            ft.commit();
-        }
+        //if(savedInstanceState == null) {
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            UserTimelineFragment frag = UserTimelineFragment.newInstance(screenName);
+//            ft.replace(R.id.flContainer, frag);
+//            ft.commit();
+        //get the viewpager
+        vpPager = (ViewPager) findViewById(R.id.vpProfile);
+
+
+        //set the viewpager adapter fr the pager
+        vpAdapter = new ProfilePagerAdapter(getSupportFragmentManager());
+        vpPager.setAdapter(vpAdapter);
+        vpAdapter.setScreenName(screenName);
+
+        //find the sliding tabstrip
+        tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabsProfile);
+
+        //attavh tabstrip to the viewpager
+        tabStrip.setViewPager(vpPager);
+        //  }
     }
 
     private void populateProfileHeader(User user) {
@@ -101,5 +125,49 @@ public class ProfileActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    //return the order of fragments in the view pager
+    public class ProfilePagerAdapter extends FragmentPagerAdapter {
+        private String tabtitles[] = {"Tweets","Friends"};
+        UserTimelineFragment hf;
+        private String screenName;
+
+        public ProfilePagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if(position == 0) {
+                hf =  UserTimelineFragment.newInstance("");
+                return hf;
+            }else if(position == 1){
+
+                return new FriendsListFragment().newInstance("") ;
+
+            }else
+                return null;
+        }
+
+        @Override
+        public int getCount() {
+            return tabtitles.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabtitles[position];
+        }
+
+        public TweetsListFragment getRegisteredFragment(int i) {
+            if(i==0)
+                return hf;
+            return null;
+        }
+
+        public void setScreenName(String screenName) {
+            this.screenName = screenName;
+        }
     }
 }

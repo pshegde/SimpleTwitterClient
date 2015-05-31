@@ -10,6 +10,8 @@ import com.loopj.android.http.RequestParams;
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.TwitterApi;
 
+import java.util.List;
+
 /*
  * 
  * This is the object responsible for communicating with a REST API. 
@@ -128,6 +130,40 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("max_id",max_id);  //since the first tweet see all the tweets
         params.put("count",TwitterConstants.MAX_TWEETS);
         //params.put("since_id",1);  //since the first tweet see all the tweets
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getFriendsIds(String uid, AsyncHttpResponseHandler handler){
+        String apiUrl = getApiUrl("friends/ids.json");
+        //specify the params
+        RequestParams params = new RequestParams();
+        params.put("user_id",uid);
+        params.put("count",TwitterConstants.MAX_USERS);
+        //params.put("since_id",1);  //since the first tweet see all the tweets
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getFriendsIdsScroll(String uid, String max_id, AsyncHttpResponseHandler handler){
+        String apiUrl = getApiUrl("friends/ids.json");
+        //specify the params
+        RequestParams params = new RequestParams();
+        params.put("user_id",uid);
+        params.put("max_id",max_id);
+        params.put("count",TwitterConstants.MAX_USERS);
+        //params.put("since_id",1);  //since the first tweet see all the tweets
+        getClient().get(apiUrl, params, handler);
+    }
+
+    public void getUserDetails(List<Integer> uids, AsyncHttpResponseHandler handler){
+        String apiUrl = getApiUrl("users/lookup.json");
+        //specify the params
+        RequestParams params = new RequestParams();
+        String uidStr="";
+        for(Integer uid:uids) {
+            uidStr += uid + ",";
+        }
+        uidStr = uidStr.replace(",$", "");
+        params.put("user_id",uidStr);
         getClient().get(apiUrl, params, handler);
     }
 

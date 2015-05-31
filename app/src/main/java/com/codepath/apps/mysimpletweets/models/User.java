@@ -7,8 +7,12 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Prajakta on 5/20/2015.
@@ -76,6 +80,23 @@ public class User extends Model implements Parcelable{
             e.printStackTrace();
         }
         return u;
+    }
+
+    public static List<User> fromJSONArray(JSONArray usersJSON) {
+        List<User> list = new ArrayList<>();
+        for(int i=0;i<usersJSON.length();i++){
+            try {
+                JSONObject userJSON = usersJSON.getJSONObject(i);
+                User user = fromJSON(userJSON);
+                if(user != null)
+                    list.add(user);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+
+        }
+        return list;
     }
 
 

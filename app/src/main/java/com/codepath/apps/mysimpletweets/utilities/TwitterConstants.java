@@ -6,4 +6,5 @@ package com.codepath.apps.mysimpletweets.utilities;
 public class TwitterConstants {
     public static final int MAX_TWEETS = 25;
     public static final String MAX_FIELD_LENGTH = "140";
+    public static final int MAX_USERS = 25;
 }
