@@ -43,9 +43,10 @@ public abstract class TweetsListFragment extends Fragment {
         tweets = new ArrayList<>();
         //construct adapter from data source
         aTweets = new TweetArrayAdapter(getActivity(), tweets);
-
+        aTweets.clear();
         setupListWithFooter(v);
-
+        //connect adapter
+        lvTweets.setAdapter(aTweets);
         // Attach the listener to the AdapterView onCreate
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -85,7 +86,7 @@ public abstract class TweetsListFragment extends Fragment {
     }
 
     public void addAll(List<Tweet> list, boolean clear) {
-        if (aTweets == null)
+        if (aTweets == null || list.size() == 0)
             return;
         if (clear)
             aTweets.clear();
@@ -137,7 +138,6 @@ public abstract class TweetsListFragment extends Fragment {
     // Adds footer to the list default hidden progress
     public void setupListWithFooter(View v) {
         // Find the ListView
-        ListView lvItems = (ListView) v.findViewById(R.id.lvTweets);
         // Inflate the footer
         if (progressBarFooter == null) {
             View footer = getActivity().getLayoutInflater().inflate(
@@ -148,8 +148,7 @@ public abstract class TweetsListFragment extends Fragment {
             // Add footer to ListView before setting adapter
             lvTweets.addFooterView(footer);
         }
-        //connect adapter
-        lvTweets.setAdapter(aTweets);
+
     }
 
     // Show progress
@@ -172,24 +171,6 @@ public abstract class TweetsListFragment extends Fragment {
 
     public abstract void populateTimeline();
 
-    //        showProgressBar();
-//        TwitterUtilities.getRestClient().getHomeTimeline(new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                Log.d("DEBUG", response.toString());
-//                addAll(Tweet.fromJSONArray(response), true);
-//                hideProgressBar();
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                hideProgressBar();
-//                Log.d("DEBUG", errorResponse.toString());
-//                Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
-//                super.onFailure(statusCode, headers, throwable, errorResponse);
-//            }
-//        });
-//    }
     public abstract void customLoadMoreDataFromApi(int offset, int total);
 
     //getter setters

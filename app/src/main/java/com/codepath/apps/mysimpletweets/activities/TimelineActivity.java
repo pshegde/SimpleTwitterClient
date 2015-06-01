@@ -127,6 +127,8 @@ public class TimelineActivity extends ActionBarActivity {
     public class TweetsPagerAdapter extends FragmentPagerAdapter {
         private String tabtitles[] = {"Home","Mentions"};
         HomeTimelineFragment hf;
+        MentionsTimelineFragment mf;
+
         public TweetsPagerAdapter(FragmentManager fm){
             super(fm);
         }
@@ -134,11 +136,14 @@ public class TimelineActivity extends ActionBarActivity {
         @Override
         public Fragment getItem(int position) {
             if(position == 0) {
-                hf = new HomeTimelineFragment();
+                if(hf == null)
+                    hf = new HomeTimelineFragment();
                 return hf;
-            }else if(position == 1)
-                return new MentionsTimelineFragment();
-            else
+            }else if(position == 1) {
+                if(mf==null)
+                    mf = new MentionsTimelineFragment();
+                return mf;
+            }else
                 return null;
         }
 
@@ -155,6 +160,8 @@ public class TimelineActivity extends ActionBarActivity {
         public TweetsListFragment getRegisteredFragment(int i) {
             if(i==0)
                 return hf;
+            else if(i==1)
+                return mf;
             return null;
         }
     }

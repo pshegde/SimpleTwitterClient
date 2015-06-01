@@ -40,7 +40,7 @@ public abstract class UsersListFragment extends Fragment {
         users = new ArrayList<>();
         //construct adapter from data source
         aUsers = new UserArrayAdapter(getActivity(),users);
-
+        aUsers.clear();
         setupListWithFooter(v);
 
 

@@ -56,26 +56,27 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder.tvName = (TextView) convertView.findViewById(R.id.tvName);
             convertView.setTag(viewHolder);
 
-            viewHolder.tvName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(getContext(), TweetDisplayActivity.class);
-                    i.putExtra("tweet_selected", tweet);   //either be serializable or parcelable
-                    getContext().startActivity(i);
-                }
-            });
-            viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(getContext(), ProfileActivity.class);
-                    i.putExtra("user_selected", tweet.getUser());   //either be serializable or parcelable
-                    getContext().startActivity(i);
-                }
-            });
 
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        viewHolder.tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), TweetDisplayActivity.class);
+                i.putExtra("tweet_selected", tweet);   //either be serializable or parcelable
+                getContext().startActivity(i);
+            }
+        });
+        viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+                i.putExtra("user_selected", tweet.getUser());   //either be serializable or parcelable
+                getContext().startActivity(i);
+            }
+        });
+
         //find the subviews to fill data in the template
 
         //populate data into subview
