@@ -86,7 +86,7 @@ public  class FriendsListFragment extends UsersListFragment {
     }
 
     public void customLoadMoreDataFromApi(int offset, int total){
-        Log.d("DEBUG", "next cur****"+getNextCursor() + "offset " +offset);
+        Log.d("DEBUG", "**next cursor "+getNextCursor() + "offset " +offset);
         if(getNextCursor() == 0 || offset>4)
                 return;
         showProgressBar();
