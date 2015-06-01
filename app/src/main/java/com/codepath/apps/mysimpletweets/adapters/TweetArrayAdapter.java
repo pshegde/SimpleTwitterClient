@@ -37,7 +37,7 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         //get tweet
         tweet = getItem(position);
         //find or inflate the template
@@ -61,18 +61,20 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.tvName.setOnClickListener(new View.OnClickListener() {
+            Tweet s = getItem(position);
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), TweetDisplayActivity.class);
-                i.putExtra("tweet_selected", tweet);   //either be serializable or parcelable
+                i.putExtra("tweet_selected", s);   //either be serializable or parcelable
                 getContext().startActivity(i);
             }
         });
         viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            Tweet s = getItem(position);
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), ProfileActivity.class);
-                i.putExtra("user_selected", tweet.getUser());   //either be serializable or parcelable
+                i.putExtra("user_selected", s.getUser());   //either be serializable or parcelable
                 getContext().startActivity(i);
             }
         });
@@ -88,4 +90,5 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
         //return view to be inserted in the list
         return convertView;
     }
+
 }

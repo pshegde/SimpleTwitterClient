@@ -42,10 +42,11 @@ public abstract class TweetsListFragment extends Fragment {
         //create the arraylist
         tweets = new ArrayList<>();
         //construct adapter from data source
-        aTweets = new TweetArrayAdapter(getActivity(), tweets);
-        aTweets.clear();
+
         setupListWithFooter(v);
         //connect adapter
+        aTweets = new TweetArrayAdapter(getActivity(), tweets);
+        aTweets.clear();
         lvTweets.setAdapter(aTweets);
         // Attach the listener to the AdapterView onCreate
         lvTweets.setOnScrollListener(new EndlessScrollListener() {
@@ -86,17 +87,23 @@ public abstract class TweetsListFragment extends Fragment {
     }
 
     public void addAll(List<Tweet> list, boolean clear) {
-        if (aTweets == null || list.size() == 0)
+        if (aTweets == null )
             return;
         if (clear)
             aTweets.clear();
+        else {
+            list.remove(0);
+        }
+
         //List<Tweet> list = Tweet.fromJSONArray(response);
+        //if clear is false then scrolling so remove first tweet since repeated
         aTweets.addAll(list);
         int lastTweet = list.size() - 1;
         max_id = String.valueOf(list.get(lastTweet).getUid());
+        aTweets.notifyDataSetChanged();
         //since_id = String.valueOf(list.get(0).getUid());//list.get(0);
         //save to database
-        saveTweetsOfflineStorage(list, true);
+        saveTweetsOfflineStorage(list, clear);
     }
 
     private void saveTweetsOfflineStorage(List<Tweet> tweetsList, boolean clear) {

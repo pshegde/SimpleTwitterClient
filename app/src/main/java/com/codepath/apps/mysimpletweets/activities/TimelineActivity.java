@@ -122,6 +122,13 @@ public class TimelineActivity extends ActionBarActivity {
         });
     }
 
+//    public void displayUserProfile(View view) {
+//        view.get
+//        Intent i = new Intent(this, ProfileActivity.class);
+//        i.putExtra("user_selected", vpAdapter.getRegisteredFragment(0).getTweet().getUser());   //either be serializable or parcelable
+//        startActivity(i);
+//    }
+
 
     //return the order of fragments in the view pager
     public class TweetsPagerAdapter extends FragmentPagerAdapter {

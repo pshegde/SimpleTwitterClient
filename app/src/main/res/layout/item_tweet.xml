@@ -14,7 +14,8 @@
         android:width="@dimen/img_view_dimen"
         android:height="@dimen/img_view_dimen"
         android:layout_marginRight="@dimen/margin_compose_text"
-        android:contentDescription="desc"/>
+        android:contentDescription="desc"
+        />
 
     <TextView
         android:layout_width="wrap_content"

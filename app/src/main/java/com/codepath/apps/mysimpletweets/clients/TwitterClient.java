@@ -53,7 +53,7 @@ public class TwitterClient extends OAuthBaseClient {
         //specify the params
         RequestParams params = new RequestParams();
         params.put("count",TwitterConstants.MAX_TWEETS);
-       // params.put("since_id",1);  //since the first tweet see all the tweets
+        params.put("since_id",1);  //since the first tweet see all the tweets
         getClient().get(apiUrl, params, handler);
     }
 
@@ -63,7 +63,7 @@ public class TwitterClient extends OAuthBaseClient {
         RequestParams params = new RequestParams();
         params.put("count", TwitterConstants.MAX_TWEETS);
         params.put("max_id",max_id);  //since the first tweet see all the tweets
-        //params.put("since_id",since_id);
+        params.put("since_id",1);
         getClient().get(apiUrl, params, handler);
 
     }
@@ -97,7 +97,7 @@ public class TwitterClient extends OAuthBaseClient {
         //specify the params
         RequestParams params = new RequestParams();
         params.put("count",TwitterConstants.MAX_TWEETS);
-       // params.put("since_id",1);  //since the first tweet see all the tweets
+       params.put("since_id",1);  //since the first tweet see all the tweets
         getClient().get(apiUrl, params, handler);
     }
 
@@ -107,7 +107,7 @@ public class TwitterClient extends OAuthBaseClient {
         RequestParams params = new RequestParams();
         params.put("count", TwitterConstants.MAX_TWEETS);
         params.put("max_id",max_id);  //since the first tweet see all the tweets
-        //params.put("since_id",since_id);
+        params.put("since_id",1);
         getClient().get(apiUrl,params,handler);
 
     }
