@@ -89,11 +89,16 @@ public abstract class TweetsListFragment extends Fragment {
     public void addAll(List<Tweet> list, boolean clear) {
         if (aTweets == null )
             return;
-        if (clear)
+        if (clear) {
             aTweets.clear();
-        else {
+            aTweets.notifyDataSetChanged();
+        } else {
+            if(list.size() == 0)
+                return;
             list.remove(0);
         }
+        if(list.size() == 0)
+            return;
 
         //List<Tweet> list = Tweet.fromJSONArray(response);
         //if clear is false then scrolling so remove first tweet since repeated

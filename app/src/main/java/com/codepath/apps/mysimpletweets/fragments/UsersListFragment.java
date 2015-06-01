@@ -29,7 +29,7 @@ public abstract class UsersListFragment extends Fragment {
     public ListView lvUsers;
     private ProgressBar progressBarFooter;
     public UserArrayAdapter aUsers;
-    private String max_id;
+    private long next_cursor;
     public SwipeRefreshLayout swipeContainerUsers;
 
     @Override
@@ -113,7 +113,7 @@ public abstract class UsersListFragment extends Fragment {
         //List<Tweet> list = Tweet.fromJSONArray(response);
         aUsers.addAll(list);
         int lastTweet = list.size() - 1;
-        max_id = String.valueOf(list.get(lastTweet).getUid());
+        //max_id = String.valueOf(list.get(lastTweet).getUid());
         //since_id = String.valueOf(list.get(0).getUid());//list.get(0);
         //save to database
         // saveTweetsOfflineStorage(list, true);
@@ -160,12 +160,12 @@ public abstract class UsersListFragment extends Fragment {
     }
 
     //getter setters
-    public String getMaxId() {
-        return max_id;
+    public long getNextCursor() {
+        return next_cursor;
     }
 
-    public void setMaxId(String max_id) {
-        this.max_id = max_id;
+    public void setNextCursor(long nextCursor) {
+        this.next_cursor = nextCursor;
     }
 
     public abstract void customLoadMoreDataFromApi(int offset, int total);
