@@ -17,6 +17,7 @@ import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.adapters.UserArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.scrolllistener.EndlessScrollListener;
+import com.codepath.apps.mysimpletweets.utilities.TwitterConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,9 @@ public abstract class UsersListFragment extends Fragment {
     public ListView lvUsers;
     private ProgressBar progressBarFooter;
     public UserArrayAdapter aUsers;
-    private long next_cursor;
+    private long next_cursor = TwitterConstants.DEFAULT_CURSOR;
     public SwipeRefreshLayout swipeContainerUsers;
+    private boolean clear = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -100,7 +102,7 @@ public abstract class UsersListFragment extends Fragment {
 //            addAll(queryResults,true);
 
         } else {
-            populateTimeline();
+            populateTimeline(false);
         }
 
     }
@@ -168,8 +170,16 @@ public abstract class UsersListFragment extends Fragment {
         this.next_cursor = nextCursor;
     }
 
+    public boolean isClear() {
+        return clear;
+    }
+
+    public void setClear(boolean clear) {
+        this.clear = clear;
+    }
+
     public abstract void customLoadMoreDataFromApi(int offset, int total);
-    public abstract void populateTimeline();
+    public abstract void populateTimeline(boolean swipeRefresh);
     public abstract void fetchTimelineAsync(int page);
 
 }

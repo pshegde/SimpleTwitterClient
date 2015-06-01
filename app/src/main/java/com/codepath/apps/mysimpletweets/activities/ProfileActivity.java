@@ -1,15 +1,20 @@
 package com.codepath.apps.mysimpletweets.activities;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +26,7 @@ import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.fragments.UserTimelineFragment;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 public class ProfileActivity extends ActionBarActivity {
     private User user;
@@ -29,10 +35,30 @@ public class ProfileActivity extends ActionBarActivity {
     private TextView tvTagline;
     private TextView tvFollowersCount;
     private TextView tvFriendsCount;
+    private RelativeLayout rlUserHeader;
 
     private ViewPager vpPager;
     private ProfilePagerAdapter vpAdapter;
     private PagerSlidingTabStrip tabStrip;
+    private Target target = new Target() {
+
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            Log.d("DEBUG", "*******************DONE");
+            //rlUserHeader.setBackgroundColor(getResources().getColor(R.color.blue));
+            rlUserHeader.setBackground(new BitmapDrawable(getResources(), bitmap));
+        }
+
+        @Override
+        public void onBitmapFailed(final Drawable errorDrawable) {
+            Log.d("DEBUG", "*******************FAILED");
+        }
+
+        @Override
+        public void onPrepareLoad(final Drawable placeHolderDrawable) {
+            Log.d("DEBUG", "*********************Prepare Load");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +75,7 @@ public class ProfileActivity extends ActionBarActivity {
         tvTagline = (TextView) findViewById(R.id.tvTagline);
         tvFollowersCount = (TextView) findViewById(R.id.tvFollowers);
         tvFriendsCount = (TextView) findViewById(R.id.tvFriends);
+        rlUserHeader = (RelativeLayout) findViewById(R.id.rlUserHeader);
 
         user = getIntent().getParcelableExtra("user_selected");
         if(user == null){
@@ -91,8 +118,9 @@ public class ProfileActivity extends ActionBarActivity {
 
         tvFriendsCount.setText(Integer.toString(user.getFriendsCount()) + " Followers");
         tvFollowersCount.setText(Integer.toString(user.getFollowersCount()) + " Friends");
-    }
 
+        Picasso.with(this).load(user.getProfileBkgdImageUrl()).into(target);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

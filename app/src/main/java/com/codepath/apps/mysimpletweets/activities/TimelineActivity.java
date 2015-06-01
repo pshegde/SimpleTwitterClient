@@ -93,7 +93,7 @@ public class TimelineActivity extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == this.RESULT_OK && requestCode==20){
-            vpAdapter.getRegisteredFragment(0).populateTimeline();
+            vpAdapter.getRegisteredFragment(0).populateTimeline(false);
 
             //((MentionsTimelineFragment)vpAdapter.getItem(1)).populateTimeline();
 

@@ -3,7 +3,7 @@
 
     <string name="app_name">SimpleTweets</string>
     <string name="login_label">Log in</string>
-    <string name="connect_to_twitter">Connect with Twitter</string>
+    <string name="connect_to_twitter">Connect to Twitter</string>
     <string name="title_activity_timeline">TimelineActivity</string>
 
     <string name="hello_world">Hello world!</string>
@@ -22,5 +22,7 @@
     <string name="title_activity_tweet_display">TweetDisplayActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="tweetzone">TweetZone</string>
+    <string name="no_friends_string">No more friends found!</string>
+    <string name="no_followers_string">No more Followers found!</string>
 
 </resources>

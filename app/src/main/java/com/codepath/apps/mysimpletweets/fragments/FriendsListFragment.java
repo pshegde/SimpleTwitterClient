@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.utilities.TwitterConstants;
 import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -33,13 +34,22 @@ public  class FriendsListFragment extends UsersListFragment {
 
     //to be overridden in fragments
     public void fetchTimelineAsync(int page) {
-
+        populateTimeline(true);
     }
 
-    public void populateTimeline() {
-        showProgressBar();
+
+    public void populateTimeline(final boolean swipeRefresh) {
+        if(!swipeRefresh){
+            showProgressBar();
+        }else {
+            setNextCursor(TwitterConstants.DEFAULT_CURSOR);  //swipe refresh true so reset cursor
+        }
+        if(getNextCursor() != TwitterConstants.DEFAULT_CURSOR && !swipeRefresh)
+            setClear(false);
+        else
+            setClear(true);
         String screenName = getArguments().getString("screen_name", "");
-        TwitterUtilities.getRestClient().getFriendsIds(screenName, new JsonHttpResponseHandler() {
+        TwitterUtilities.getRestClient().getFriendsIds(screenName, String.valueOf(getNextCursor()), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("DEBUG", response.toString());
@@ -51,19 +61,33 @@ public  class FriendsListFragment extends UsersListFragment {
                     for (int i=0;i<len;i++){
                         listFriends.add(friends.getInt(i));
                     }
+                    if(len == 0){
+                        Toast.makeText(getActivity(), R.string.no_friends_string, Toast.LENGTH_SHORT).show();
+                        if(!swipeRefresh)
+                            hideProgressBar();
+                        else
+                            swipeContainerUsers.setRefreshing(false);
 
+                        return;
+                    }
                     TwitterUtilities.getRestClient().getUserDetails(listFriends,new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                             //super.onSuccess(statusCode, headers, response);
                             Log.d("DEBUG", response.toString());
-                            hideProgressBar();
-                            addAll(User.fromJSONArray(response), true);
+                            if(!swipeRefresh)
+                                hideProgressBar();
+                            else
+                                swipeContainerUsers.setRefreshing(false);
+                            addAll(User.fromJSONArray(response), isClear());
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            hideProgressBar();
+                            if(!swipeRefresh)
+                                hideProgressBar();
+                            else
+                                swipeContainerUsers.setRefreshing(false);
                             Log.d("DEBUG", errorResponse.toString());
                             Toast.makeText(getActivity(), R.string.no_user_string, Toast.LENGTH_SHORT).show();
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -77,7 +101,10 @@ public  class FriendsListFragment extends UsersListFragment {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                hideProgressBar();
+                if(!swipeRefresh)
+                    hideProgressBar();
+                else
+                    swipeContainerUsers.setRefreshing(false);
                 Log.d("DEBUG", errorResponse.toString());
                 Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -86,47 +113,9 @@ public  class FriendsListFragment extends UsersListFragment {
     }
 
     public void customLoadMoreDataFromApi(int offset, int total){
-        Log.d("DEBUG", "**next cursor "+getNextCursor() + "offset " +offset);
+        Log.d("DEBUG", "**next cursor " + getNextCursor() + "offset " + offset);
         if(getNextCursor() == 0 || offset>4)
                 return;
-        showProgressBar();
-        String screenName = getArguments().getString("screen_name", "");
-        TwitterUtilities.getRestClient().getFriendsIdsScroll(screenName, String.valueOf(getNextCursor()),new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d("DEBUG", response.toString());
-                try {
-                    List<Integer> listFriends = new ArrayList<Integer>();
-                    JSONArray friends = response.getJSONArray("ids");
-                    setNextCursor(response.getInt("next_cursor"));
-                    int len = friends.length();
-                    for (int i = 0; i < len; i++) {
-                        listFriends.add(friends.getInt(i));
-                    }
-
-                    TwitterUtilities.getRestClient().getUserDetails(listFriends, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                            //super.onSuccess(statusCode, headers, response);
-                            Log.d("DEBUG", response.toString());
-                            hideProgressBar();
-                            addAll(User.fromJSONArray(response), false);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            hideProgressBar();
-                            Log.d("DEBUG", errorResponse.toString());
-                            Toast.makeText(getActivity(), R.string.no_user_string, Toast.LENGTH_SHORT).show();
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        });
+        populateTimeline(false);
     }
 }

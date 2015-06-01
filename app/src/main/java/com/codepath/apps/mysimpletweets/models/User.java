@@ -45,6 +45,8 @@ public class User extends Model implements Parcelable{
     private int followersCount;
     @Column(name = "friendsCount")
     private int friendsCount;
+    @Column(name = "profileBkgdImageUrl")
+    private String profileBkgdImageUrl;
 
     public User() {
         super();
@@ -76,6 +78,7 @@ public class User extends Model implements Parcelable{
             u.tagLine = json.getString("description");
             u.followersCount = json.getInt("followers_count");
             u.friendsCount = json.getInt("friends_count");
+            u.profileBkgdImageUrl = json.getString("profile_background_image_url");
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -140,6 +143,13 @@ public class User extends Model implements Parcelable{
         this.screenName = screenName;
     }
 
+    public String getProfileBkgdImageUrl() {
+        return profileBkgdImageUrl;
+    }
+
+    public void setProfileBkgdImageUrl(String profileBkgdImageUrl) {
+        this.profileBkgdImageUrl = profileBkgdImageUrl;
+    }
 
     @Override
     public int describeContents() {
@@ -155,6 +165,7 @@ public class User extends Model implements Parcelable{
         dest.writeString(this.tagLine);
         dest.writeInt(this.followersCount);
         dest.writeInt(this.friendsCount);
+        dest.writeString(this.profileBkgdImageUrl);
 
     }
 
@@ -166,7 +177,7 @@ public class User extends Model implements Parcelable{
         this.tagLine = in.readString();
         this.followersCount = in.readInt();
         this.friendsCount = in.readInt();
-
+        this.profileBkgdImageUrl = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

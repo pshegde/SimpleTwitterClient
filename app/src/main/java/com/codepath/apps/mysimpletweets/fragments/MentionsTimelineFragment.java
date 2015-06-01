@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.mysimpletweets.R;
 import com.codepath.apps.mysimpletweets.models.Tweet;
+import com.codepath.apps.mysimpletweets.utilities.TwitterConstants;
 import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -31,44 +32,46 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 //            addAll(queryResults,true);
 
         } else {
-            populateTimeline();
+            populateTimeline(false);
         }
     }
 
     @Override
     public void fetchTimelineAsync(int page) {
-        TwitterUtilities.getRestClient().getMentionsTimeline(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                addAll(Tweet.fromJSONArray(response), true);
-                // Now we call setRefreshing(false) to signal refresh has finished
-                swipeContainer.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-                Toast.makeText(getActivity(), R.string.no_network_string, Toast.LENGTH_SHORT).show();
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
+        populateTimeline(true);
 
     }
 
     @Override
-    public void populateTimeline() {
-        showProgressBar();
-        TwitterUtilities.getRestClient().getMentionsTimeline(new JsonHttpResponseHandler() {
+    public void populateTimeline(final boolean swipeRefresh) {
+        if(!swipeRefresh){
+            showProgressBar();
+        }else {
+            setMaxId(TwitterConstants.DEFAULT_MAX_ID);  //swipe refresh true so reset cursor
+        }
+        if(getMaxId() != TwitterConstants.DEFAULT_MAX_ID && !swipeRefresh)
+            setClear(false);
+        else
+            setClear(true);
+        TwitterUtilities.getRestClient().getMentionsTimeline(getMaxId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                hideProgressBar();
+                if(!swipeRefresh)
+                    hideProgressBar();
+                else
+                    swipeContainer.setRefreshing(false);
+
                 Log.d("DEBUG", response.toString());
-                addAll(Tweet.fromJSONArray(response), true);
+                addAll(Tweet.fromJSONArray(response), isClear());
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                hideProgressBar();
+                if(!swipeRefresh)
+                    hideProgressBar();
+                else
+                    swipeContainer.setRefreshing(false);
+
                 Log.d("DEBUG", errorResponse.toString());
                 Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -80,22 +83,6 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     public void customLoadMoreDataFromApi(int offset, int total) {
         if (offset>2)
             return;
-        showProgressBar();
-        TwitterUtilities.getRestClient().getMentionsTimelineScroll(getMaxId(), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                hideProgressBar();
-                Log.d("DEBUG", response.toString());
-                addAll(Tweet.fromJSONArray(response), false);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                hideProgressBar();
-                Log.d("DEBUG", errorResponse.toString());
-                Toast.makeText(getActivity(), R.string.no_tweets, Toast.LENGTH_SHORT).show();
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
+        populateTimeline(false);
     }
 }

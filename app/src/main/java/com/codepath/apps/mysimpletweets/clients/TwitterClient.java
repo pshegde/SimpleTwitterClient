@@ -48,25 +48,27 @@ public class TwitterClient extends OAuthBaseClient {
    // each method is timeline
     //getHometimeline is to get hometimeline
     //https://api.twitter.com/1.1/statuses/home_timeline.json?count=25&since_id=1
-    public void getHomeTimeline(AsyncHttpResponseHandler handler){
+    public void getHomeTimeline(String max_id, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         //specify the params
         RequestParams params = new RequestParams();
         params.put("count",TwitterConstants.MAX_TWEETS);
-        params.put("since_id",1);  //since the first tweet see all the tweets
+        params.put("since_id", 1);  //since the first tweet see all the tweets
+        if(max_id != TwitterConstants.DEFAULT_MAX_ID)
+            params.put("max_id", max_id);
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getHomeTimelineScroll(String max_id, AsyncHttpResponseHandler handler) {
-        String apiUrl = getApiUrl("statuses/home_timeline.json");
-        //specify the params
-        RequestParams params = new RequestParams();
-        params.put("count", TwitterConstants.MAX_TWEETS);
-        params.put("max_id",max_id);  //since the first tweet see all the tweets
-        params.put("since_id",1);
-        getClient().get(apiUrl, params, handler);
-
-    }
+//    public void getHomeTimelineScroll(String max_id, AsyncHttpResponseHandler handler) {
+//        String apiUrl = getApiUrl("statuses/home_timeline.json");
+//        //specify the params
+//        RequestParams params = new RequestParams();
+//        params.put("count", TwitterConstants.MAX_TWEETS);
+//        params.put("max_id",max_id);  //since the first tweet see all the tweets
+//        params.put("since_id",1);
+//        getClient().get(apiUrl, params, handler);
+//
+//    }
 
     public void getUserCredentials(AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("account/verify_credentials.json");
@@ -92,89 +94,99 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getMentionsTimeline(AsyncHttpResponseHandler handler){
+    public void getMentionsTimeline(String max_id, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("statuses/mentions_timeline.json");
         //specify the params
         RequestParams params = new RequestParams();
         params.put("count",TwitterConstants.MAX_TWEETS);
-       params.put("since_id",1);  //since the first tweet see all the tweets
+       params.put("since_id", 1);  //since the first tweet see all the tweets
+        if(max_id != TwitterConstants.DEFAULT_MAX_ID)
+            params.put("max_id",max_id);
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getMentionsTimelineScroll(String max_id, AsyncHttpResponseHandler handler) {
-        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
-        //specify the params
-        RequestParams params = new RequestParams();
-        params.put("count", TwitterConstants.MAX_TWEETS);
-        params.put("max_id",max_id);  //since the first tweet see all the tweets
-        params.put("since_id",1);
-        getClient().get(apiUrl,params,handler);
+//    public void getMentionsTimelineScroll(String max_id, AsyncHttpResponseHandler handler) {
+//        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+//        //specify the params
+//        RequestParams params = new RequestParams();
+//        params.put("count", TwitterConstants.MAX_TWEETS);
+//        params.put("max_id",max_id);  //since the first tweet see all the tweets
+//        params.put("since_id",1);
+//        getClient().get(apiUrl,params,handler);
+//
+//    }
 
-    }
-
-    public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler){
+    public void getUserTimeline(String screenName, String max_id, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("statuses/user_timeline.json");
         //specify the params
         RequestParams params = new RequestParams();
         params.put("screen_name",screenName);
         params.put("count",TwitterConstants.MAX_TWEETS);
         params.put("since_id",1);  //since the first tweet see all the tweets
+        if(max_id != TwitterConstants.DEFAULT_MAX_ID)
+            params.put("max_id",max_id);
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getUserTimelineScroll(String screenName, String max_id, AsyncHttpResponseHandler handler){
-        String apiUrl = getApiUrl("statuses/user_timeline.json");
-        //specify the params
-        RequestParams params = new RequestParams();
-        params.put("screen_name",screenName);
-        params.put("max_id",max_id);  //since the first tweet see all the tweets
-        params.put("count",TwitterConstants.MAX_TWEETS);
-        params.put("since_id",1);  //since the first tweet see all the tweets
-        getClient().get(apiUrl, params, handler);
-    }
+//    public void getUserTimelineScroll(String screenName, String max_id, AsyncHttpResponseHandler handler){
+//        String apiUrl = getApiUrl("statuses/user_timeline.json");
+//        //specify the params
+//        RequestParams params = new RequestParams();
+//        params.put("screen_name",screenName);
+//        params.put("max_id",max_id);  //since the first tweet see all the tweets
+//        params.put("count",TwitterConstants.MAX_TWEETS);
+//        params.put("since_id",1);  //since the first tweet see all the tweets
+//        getClient().get(apiUrl, params, handler);
+//    }
 
-    public void getFriendsIds(String screenName, AsyncHttpResponseHandler handler){
+    public void getFriendsIds(String screenName,  String cursor, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("friends/ids.json");
         //specify the params
         RequestParams params = new RequestParams();
         params.put("screen_name",screenName);
-        params.put("count",TwitterConstants.MAX_USERS);
+        params.put("count", TwitterConstants.MAX_USERS);
+        if(cursor!=String.valueOf(TwitterConstants.DEFAULT_CURSOR))
+            params.put("cursor",cursor);
+
         //params.put("cursor",-1);
         //params.put("since_id",1);  //since the first tweet see all the tweets
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getFriendsIdsScroll(String screenName, String cursor, AsyncHttpResponseHandler handler){
-        String apiUrl = getApiUrl("friends/ids.json");
-        //specify the params
-        RequestParams params = new RequestParams();
-        params.put("screen_name",screenName);
-        params.put("cursor",cursor);
-        params.put("count",TwitterConstants.MAX_USERS);
-        //params.put("since_id",1);  //since the first tweet see all the tweets
-        getClient().get(apiUrl, params, handler);
-    }
+//    public void getFriendsIdsScroll(String screenName,AsyncHttpResponseHandler handler){
+//        String apiUrl = getApiUrl("friends/ids.json");
+//        //specify the params
+//        RequestParams params = new RequestParams();
+//        params.put("screen_name",screenName);
+//        params.put("cursor",cursor);
+//        params.put("count",TwitterConstants.MAX_USERS);
+//
+//        //params.put("since_id",1);  //since the first tweet see all the tweets
+//        getClient().get(apiUrl, params, handler);
+//    }
 
-    public void getFollowersIds(String screenName, AsyncHttpResponseHandler handler){
+    public void getFollowersIds(String screenName, String cursor, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("followers/ids.json");
         //specify the params
         RequestParams params = new RequestParams();
         params.put("screen_name",screenName);
         params.put("count",TwitterConstants.MAX_USERS);
+        if(cursor!=String.valueOf(TwitterConstants.DEFAULT_CURSOR))
+            params.put("cursor",cursor);
         //params.put("since_id",1);  //since the first tweet see all the tweets
         getClient().get(apiUrl, params, handler);
     }
 
-    public void getFollowersIdsScroll(String screenName, String cursor, AsyncHttpResponseHandler handler){
-        String apiUrl = getApiUrl("followers/ids.json");
-        //specify the params
-        RequestParams params = new RequestParams();
-        params.put("screen_name",screenName);
-        params.put("cursor",cursor);
-        params.put("count",TwitterConstants.MAX_USERS);
-        //params.put("since_id",1);  //since the first tweet see all the tweets
-        getClient().get(apiUrl, params, handler);
-    }
+//    public void getFollowersIdsScroll(String screenName, String cursor, AsyncHttpResponseHandler handler){
+//        String apiUrl = getApiUrl("followers/ids.json");
+//        //specify the params
+//        RequestParams params = new RequestParams();
+//        params.put("screen_name",screenName);
+//        params.put("cursor",cursor);
+//        params.put("count",TwitterConstants.MAX_USERS);
+//        //params.put("since_id",1);  //since the first tweet see all the tweets
+//        getClient().get(apiUrl, params, handler);
+//    }
 
     public void getUserDetails(List<Integer> uids, AsyncHttpResponseHandler handler){
         String apiUrl = getApiUrl("users/lookup.json");

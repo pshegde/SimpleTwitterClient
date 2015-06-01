@@ -19,6 +19,7 @@ import com.codepath.apps.mysimpletweets.adapters.TweetArrayAdapter;
 import com.codepath.apps.mysimpletweets.models.Tweet;
 import com.codepath.apps.mysimpletweets.models.User;
 import com.codepath.apps.mysimpletweets.scrolllistener.EndlessScrollListener;
+import com.codepath.apps.mysimpletweets.utilities.TwitterConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,10 @@ public abstract class TweetsListFragment extends Fragment {
     public ListView lvTweets;
     private ProgressBar progressBarFooter;
     public TweetArrayAdapter aTweets;
-    private String max_id;
+    private String max_id = TwitterConstants.DEFAULT_MAX_ID;
     //private String since_id;
     public SwipeRefreshLayout swipeContainer;
+    private boolean clear = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -181,7 +183,7 @@ public abstract class TweetsListFragment extends Fragment {
     //to be overridden in fragments
     public abstract void fetchTimelineAsync(int page);
 
-    public abstract void populateTimeline();
+    public abstract void populateTimeline(boolean swipeRefresh);
 
     public abstract void customLoadMoreDataFromApi(int offset, int total);
 
@@ -192,6 +194,14 @@ public abstract class TweetsListFragment extends Fragment {
 
     public void setMaxId(String max_id) {
         this.max_id = max_id;
+    }
+
+    public boolean isClear() {
+        return clear;
+    }
+
+    public void setClear(boolean clear) {
+        this.clear = clear;
     }
 
 

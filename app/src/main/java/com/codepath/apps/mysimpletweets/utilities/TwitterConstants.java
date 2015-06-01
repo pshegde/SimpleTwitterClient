@@ -7,4 +7,6 @@ public class TwitterConstants {
     public static final int MAX_TWEETS = 25;
     public static final String MAX_FIELD_LENGTH = "140";
     public static final int MAX_USERS = 25;
+    public static final long DEFAULT_CURSOR = -1;
+    public static final String DEFAULT_MAX_ID = "-1";
 }
