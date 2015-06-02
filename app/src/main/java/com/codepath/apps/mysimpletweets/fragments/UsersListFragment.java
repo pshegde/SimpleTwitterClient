@@ -102,6 +102,7 @@ public abstract class UsersListFragment extends Fragment {
 //            addAll(queryResults,true);
 
         } else {
+            setClear(true);
             populateTimeline(false);
         }
 

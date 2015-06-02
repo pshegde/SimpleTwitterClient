@@ -44,10 +44,10 @@ public  class FriendsListFragment extends UsersListFragment {
         }else {
             setNextCursor(TwitterConstants.DEFAULT_CURSOR);  //swipe refresh true so reset cursor
         }
-        if(getNextCursor() != TwitterConstants.DEFAULT_CURSOR && !swipeRefresh)
-            setClear(false);
-        else
+        if(swipeRefresh)
             setClear(true);
+        else if (getNextCursor() != TwitterConstants.DEFAULT_CURSOR)
+            setClear(false);
         String screenName = getArguments().getString("screen_name", "");
         TwitterUtilities.getRestClient().getFriendsIds(screenName, String.valueOf(getNextCursor()), new JsonHttpResponseHandler() {
             @Override
@@ -113,8 +113,8 @@ public  class FriendsListFragment extends UsersListFragment {
     }
 
     public void customLoadMoreDataFromApi(int offset, int total){
-        Log.d("DEBUG", "**next cursor " + getNextCursor() + "offset " + offset);
-        if(getNextCursor() == 0 ||offset>8) //
+        Log.d("DEBUG", "**friends:next cursor " + getNextCursor() + "offset " + offset);
+        if(getNextCursor() == 0 ) //
                 return;
         populateTimeline(false);
     }
