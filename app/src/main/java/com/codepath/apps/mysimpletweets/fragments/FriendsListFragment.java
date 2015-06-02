@@ -62,7 +62,7 @@ public  class FriendsListFragment extends UsersListFragment {
                         listFriends.add(friends.getInt(i));
                     }
                     if(len == 0){
-                        Toast.makeText(getActivity(), R.string.no_friends_string, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getActivity(), R.string.no_friends_string, Toast.LENGTH_SHORT).show();
                         if(!swipeRefresh)
                             hideProgressBar();
                         else
@@ -114,7 +114,7 @@ public  class FriendsListFragment extends UsersListFragment {
 
     public void customLoadMoreDataFromApi(int offset, int total){
         Log.d("DEBUG", "**next cursor " + getNextCursor() + "offset " + offset);
-        if(getNextCursor() == 0 || offset>4)
+        if(getNextCursor() == 0 ||offset>8) //
                 return;
         populateTimeline(false);
     }

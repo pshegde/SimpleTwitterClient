@@ -31,7 +31,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
             // Query ActiveAndroid for list of data
             List<Tweet> queryResults = new Select().from(Tweet.class)
                     .orderBy("CreatedAt ASC").limit(100).execute();
-            // Load the result into the adapter using `addAll`
+             //Load the result into the adapter using `addAll`
             addAll(queryResults,true);
 
         } else {

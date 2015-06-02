@@ -203,6 +203,4 @@ public abstract class TweetsListFragment extends Fragment {
     public void setClear(boolean clear) {
         this.clear = clear;
     }
-
-
 }

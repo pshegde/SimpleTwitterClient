@@ -57,17 +57,17 @@ public  class FollowersListFragment extends UsersListFragment {
                     JSONArray friends = response.getJSONArray("ids");
                     setNextCursor(response.getInt("next_cursor"));
                     int len = friends.length();
+                    for (int i = 0; i < len; i++) {
+                        listFollowers.add(friends.getInt(i));
+                    }
                     if(len == 0) {
-                        Toast.makeText(getActivity(), R.string.no_followers_string, Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getActivity(), R.string.no_followers_string, Toast.LENGTH_SHORT).show();
                         if(!swipeRefresh)
                             hideProgressBar();
                         else
                             swipeContainerUsers.setRefreshing(false);
 
                         return;
-                    }
-                    for (int i = 0; i < len; i++) {
-                        listFollowers.add(friends.getInt(i));
                     }
 
                     TwitterUtilities.getRestClient().getUserDetails(listFollowers, new JsonHttpResponseHandler() {
@@ -116,8 +116,8 @@ public  class FollowersListFragment extends UsersListFragment {
     }
 
     public void customLoadMoreDataFromApi(int offset, int total){
-        Log.d("DEBUG", "**next cursor " + getNextCursor() + "offset " + offset);
-        if(getNextCursor() == 0 || offset>10)
+        Log.d("DEBUG", "**followers: next cursor " + getNextCursor() + "offset " + offset);
+        if(getNextCursor() == 0 || offset>8)
             return;
        populateTimeline(false);
     }
