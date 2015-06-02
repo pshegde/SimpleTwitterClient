@@ -19,11 +19,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ivProfileImage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:width="@dimen/img_view_dimen"
             android:height="@dimen/img_view_dimen"
+            android:background="#FFFFFF"
+            android:padding="2dp"
             android:layout_marginRight="@dimen/margin_compose_text"
             android:contentDescription="desc"/>
 
@@ -31,11 +33,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvName"
-            android:layout_toRightOf="@+id/ivProfileImage"
-            android:layout_toEndOf="@+id/ivProfileImage"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:layout_marginLeft="@dimen/five_pix"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ivProfileImage"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+
             />
 
         <TextView
@@ -43,9 +46,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvTagline"
             android:layout_below="@+id/tvName"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/gray"
-            android:layout_marginLeft="@dimen/five_pix"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/white"
             android:textSize="12sp"
              />
 
