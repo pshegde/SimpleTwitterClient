@@ -31,7 +31,7 @@ The following **optional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img title='walkthrough' src='https://github.com/pshegde/TwitterClient/blob/master/gifs/walkthrough_twitter6.gif' width=''/>
+<img title='walkthrough' src='https://github.com/pshegde/TwitterClient/blob/master/gifs/1.gif' width=''/>
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
