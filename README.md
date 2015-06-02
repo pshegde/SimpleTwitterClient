@@ -37,7 +37,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Twitter api rate limits reached 
+Twitter api rate limits reached a lot of times. Faced some difficulty testing the app. 
 
 ## Open-source libraries used
 
