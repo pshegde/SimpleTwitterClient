@@ -30,6 +30,8 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
         TextView tvBody;
         TextView tvDate;
         TextView tvName;
+        TextView tvRetweetCount;
+        TextView tvFavCount;
     }
 
     public TweetArrayAdapter(Context context, List<Tweet> tweets) {
@@ -54,9 +56,9 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
             viewHolder.tvBody = (TextView) convertView.findViewById(R.id.tvBody);
             viewHolder.tvDate = (TextView) convertView.findViewById(R.id.tvDate);
             viewHolder.tvName = (TextView) convertView.findViewById(R.id.tvName);
+            viewHolder.tvRetweetCount = (TextView) convertView.findViewById(R.id.tvRetweetCount);
+            viewHolder.tvFavCount = (TextView) convertView.findViewById(R.id.tvFavCount);
             convertView.setTag(viewHolder);
-
-
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -87,6 +89,9 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet>{
         viewHolder.tvDate.setText(TwitterUtilities.getRelativeTimeAgo(tweet.getCreatedAt()));
         viewHolder.tvName.setText(tweet.getUser().getName());
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.ivProfileImage);
+
+        viewHolder.tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
+        viewHolder.tvFavCount.setText(String.valueOf(tweet.getFavCount()));
         //return view to be inserted in the list
         return convertView;
     }

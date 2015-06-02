@@ -33,8 +33,8 @@ public class ProfileActivity extends ActionBarActivity {
     private ImageView ivProfileImage;
     private TextView tvName;
     private TextView tvTagline;
-    private TextView tvFollowersCount;
-    private TextView tvFriendsCount;
+//    private TextView tvFollowersCount;
+//    private TextView tvFriendsCount;
     private RelativeLayout rlUserHeader;
 
     private ViewPager vpPager;
@@ -73,8 +73,8 @@ public class ProfileActivity extends ActionBarActivity {
         ivProfileImage = (ImageView) findViewById(R.id.ivProfileImage);
         tvName = (TextView) findViewById(R.id.tvName);
         tvTagline = (TextView) findViewById(R.id.tvTagline);
-        tvFollowersCount = (TextView) findViewById(R.id.tvFollowers);
-        tvFriendsCount = (TextView) findViewById(R.id.tvFriends);
+//        tvFollowersCount = (TextView) findViewById(R.id.tvFollowers);
+//        tvFriendsCount = (TextView) findViewById(R.id.tvFriends);
         rlUserHeader = (RelativeLayout) findViewById(R.id.rlUserHeader);
 
         user = getIntent().getParcelableExtra("user_selected");
@@ -116,8 +116,8 @@ public class ProfileActivity extends ActionBarActivity {
         tvTagline.setText(user.getTagLine());
         Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
 
-        tvFriendsCount.setText(Integer.toString(user.getFriendsCount()) + " Followers");
-        tvFollowersCount.setText(Integer.toString(user.getFollowersCount()) + " Friends");
+//        tvFriendsCount.setText(Integer.toString(user.getFriendsCount()) + " Followers");
+//        tvFollowersCount.setText(Integer.toString(user.getFollowersCount()) + " Friends");
 
         Picasso.with(this).load(user.getProfileBkgdImageUrl()).into(target);
     }
@@ -173,7 +173,12 @@ public class ProfileActivity extends ActionBarActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return tabtitles[position];
+            String number="";
+            if (position == 1)
+                number = ""+user.getFriendsCount();
+            else if(position == 2)
+                number = ""+user.getFollowersCount();
+            return number + " " + tabtitles[position];
         }
 
         public TweetsListFragment getRegisteredFragment(int i) {

@@ -27,26 +27,13 @@ public class Tweet extends Model implements Parcelable {
     private String createdAt;
     @Column(name = "user", onUpdate = Column.ForeignKeyAction.CASCADE, onDelete = Column.ForeignKeyAction.CASCADE)
     private User user;
-
+    @Column(name = "retweetCount")
+    private int retweetCount;
+    @Column(name = "favCount")
+    private int favCount;
 
     public Tweet() {
         super();
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public long getUid() {
-        return uid;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
     }
 
      //Deserialize the JSON into a java obj
@@ -61,6 +48,8 @@ public class Tweet extends Model implements Parcelable {
             tweet.uid = jsonObject.getLong("id");
             tweet.createdAt = jsonObject.getString("created_at");
             tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+            tweet.retweetCount = jsonObject.getInt("retweet_count");
+            tweet.favCount = jsonObject.getInt("favourites_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -85,6 +74,22 @@ public class Tweet extends Model implements Parcelable {
         return list;
     }
 
+    public String getBody() {
+        return body;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
     public void setBody(String body) {
         this.body = body;
     }
@@ -101,6 +106,21 @@ public class Tweet extends Model implements Parcelable {
         this.user = user;
     }
 
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public int getFavCount() {
+        return favCount;
+    }
+
+    public void setFavCount(int favCount) {
+        this.favCount = favCount;
+    }
 
     @Override
     public int describeContents() {
@@ -113,7 +133,8 @@ public class Tweet extends Model implements Parcelable {
         dest.writeLong(this.uid);
         dest.writeString(this.createdAt);
         dest.writeParcelable(this.user, 0);
-
+        dest.writeInt(this.retweetCount);
+        dest.writeInt(this.favCount);
     }
 
     private Tweet(Parcel in) {
@@ -121,7 +142,8 @@ public class Tweet extends Model implements Parcelable {
         this.uid = in.readLong();
         this.createdAt = in.readString();
         this.user = in.readParcelable(User.class.getClassLoader());
-
+        this.retweetCount = in.readInt();
+        this.favCount = in.readInt();
     }
 
     public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {

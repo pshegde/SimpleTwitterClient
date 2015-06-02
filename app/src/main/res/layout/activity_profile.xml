@@ -51,30 +51,30 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rlCounts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_below="@id/rlUserHeader"
-        android:orientation="horizontal"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rlCounts"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_below="@id/rlUserHeader"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true">-->
 
-        <TextView
-            android:id="@+id/tvFriends"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"/>
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/tvFriends"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_alignParentLeft="true"/>&ndash;&gt;-->
 
-        <TextView
-            android:id="@+id/tvFollowers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            />
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/tvFollowers"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_alignParentRight="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;/>&ndash;&gt;-->
 
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
 
     <!--<FrameLayout-->
         <!--android:id="@+id/flContainer"-->
@@ -88,9 +88,11 @@
 
         <com.astuetz.PagerSlidingTabStrip
             android:id="@+id/tabsProfile"
-            android:layout_below="@id/rlCounts"
+            android:layout_below="@id/rlUserHeader"
             app:pstsShouldExpand="true"
             app:pstsTextAllCaps="true"
+            app:pstsIndicatorColor="@color/blue"
+            android:textColor="@color/blue"
             android:layout_width="match_parent"
             android:layout_height="48dp">
         </com.astuetz.PagerSlidingTabStrip>
