@@ -35,6 +35,8 @@ public class HomeTimelineFragment extends TweetsListFragment {
             addAll(queryResults,true);
 
         } else {
+            setClear(true);
+            setMaxId(TwitterConstants.DEFAULT_MAX_ID);
             populateTimeline(false);
         }
 
@@ -42,15 +44,16 @@ public class HomeTimelineFragment extends TweetsListFragment {
     //send api req to timeline json and crate tweet obj using deserialize and create tweet
     public void populateTimeline(final boolean swipeRefresh) {
         Toast.makeText(getActivity(), "postttt", Toast.LENGTH_SHORT);
+
         if(!swipeRefresh){
             showProgressBar();
         }else {
-            setMaxId(TwitterConstants.DEFAULT_MAX_ID);  //swipe refresh true so reset cursor
+            setMaxId(TwitterConstants.DEFAULT_MAX_ID);  //swipe refresh true so reset
         }
-        if(getMaxId() != TwitterConstants.DEFAULT_MAX_ID && !swipeRefresh)
-            setClear(false);
-        else
+        if(swipeRefresh)
             setClear(true);
+        else if (getMaxId() != TwitterConstants.DEFAULT_MAX_ID)
+            setClear(false);
         TwitterUtilities.getRestClient().getHomeTimeline(getMaxId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -88,6 +91,8 @@ public class HomeTimelineFragment extends TweetsListFragment {
     }
 
     public void fetchTimelineAsync(int page) {
+        setClear(true);
+        setMaxId(TwitterConstants.DEFAULT_MAX_ID);
         populateTimeline(true);
     }
 

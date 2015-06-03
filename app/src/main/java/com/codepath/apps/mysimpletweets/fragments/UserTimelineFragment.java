@@ -32,6 +32,8 @@ public class UserTimelineFragment extends TweetsListFragment {
 //            addAll(queryResults,true);
 
         } else {
+            setClear(true);
+            setMaxId(TwitterConstants.DEFAULT_MAX_ID);
             populateTimeline(false);
         }
     }
@@ -46,6 +48,8 @@ public class UserTimelineFragment extends TweetsListFragment {
 
     @Override
     public void fetchTimelineAsync(int page) {
+        setClear(true);
+        setMaxId(TwitterConstants.DEFAULT_MAX_ID);
         populateTimeline(true);
 
     }
@@ -56,12 +60,12 @@ public class UserTimelineFragment extends TweetsListFragment {
         if(!swipeRefresh){
             showProgressBar();
         }else {
-            setMaxId(TwitterConstants.DEFAULT_MAX_ID);  //swipe refresh true so reset cursor
+            setMaxId(TwitterConstants.DEFAULT_MAX_ID);  //swipe refresh true so reset
         }
-        if(getMaxId() != TwitterConstants.DEFAULT_MAX_ID && !swipeRefresh)
-            setClear(false);
-        else
+        if(swipeRefresh)
             setClear(true);
+        else if (getMaxId() != TwitterConstants.DEFAULT_MAX_ID)
+            setClear(false);
         TwitterUtilities.getRestClient().getUserTimeline(screenname, getMaxId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {

@@ -34,6 +34,8 @@ public  class FriendsListFragment extends UsersListFragment {
 
     //to be overridden in fragments
     public void fetchTimelineAsync(int page) {
+        setClear(true);
+        setNextCursor(TwitterConstants.DEFAULT_CURSOR);
         populateTimeline(true);
     }
 

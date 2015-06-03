@@ -103,6 +103,7 @@ public abstract class UsersListFragment extends Fragment {
 
         } else {
             setClear(true);
+            setNextCursor(TwitterConstants.DEFAULT_CURSOR);
             populateTimeline(false);
         }
 

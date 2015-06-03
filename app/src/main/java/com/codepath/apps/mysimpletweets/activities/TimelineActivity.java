@@ -20,6 +20,7 @@ import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
 import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 import com.codepath.apps.mysimpletweets.models.User;
+import com.codepath.apps.mysimpletweets.utilities.TwitterConstants;
 import com.codepath.apps.mysimpletweets.utilities.TwitterUtilities;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -93,6 +94,8 @@ public class TimelineActivity extends ActionBarActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == this.RESULT_OK && requestCode==20){
+            vpAdapter.getRegisteredFragment(0).setMaxId(TwitterConstants.DEFAULT_MAX_ID);
+            vpAdapter.getRegisteredFragment(0).setClear(true);
             vpAdapter.getRegisteredFragment(0).populateTimeline(false);
 
             //((MentionsTimelineFragment)vpAdapter.getItem(1)).populateTimeline();
